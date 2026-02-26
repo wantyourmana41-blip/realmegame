@@ -6,258 +6,334 @@
 <title>realme Jump Challenge</title>
 
 <style>
-  :root{
-    --realme-yellow:#FFD400;
-    --ink:#111;
-    --shadow: rgba(0,0,0,.18);
-    --muted: rgba(0,0,0,.65);
-    --good:#14b86a;
-  }
-  *{box-sizing:border-box}
-  html,body{
-    height:100%;
-    margin:0;
-    background:var(--realme-yellow);
-    font-family: Arial, sans-serif;
-    text-align:center;
-    overflow:hidden;
-    overscroll-behavior:none;
-    touch-action:manipulation;
-    -webkit-user-select:none;
-    user-select:none;
-  }
+:root{
+  --rm-yellow:#FFD400;
+  --rm-ink:#111111;
+  --rm-muted: rgba(17,17,17,.64);
 
-  .logo{
-    font-size:56px;
-    font-weight:900;
-    color:var(--ink);
-    margin-top:18px;
-    letter-spacing:.5px;
-  }
-  .subtitle{
-    margin:4px 0 10px;
-    color:rgba(0,0,0,.7);
-    font-size:14px;
-  }
+  --surface:#FFFFFF;
+  --surface-2:#FFF9D9;
 
-  .panel{
-    width:min(96vw, 980px);
-    margin:0 auto;
-    background:rgba(255,255,255,.58);
-    border-radius:22px;
-    padding:14px 14px 12px;
-    box-shadow:0 16px 34px var(--shadow);
-  }
+  --stroke: rgba(17,17,17,.10);
+  --shadow: 0 18px 55px rgba(0,0,0,.22);
 
+  --radius-xl: 26px;
+  --radius-lg: 18px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
+  height:100%;
+  margin:0;
+  background:var(--rm-yellow);
+  color:var(--rm-ink);
+
+  /* Professional system font stack */
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  text-align:center;
+  overflow:hidden;
+  overscroll-behavior:none;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+.logo{
+  margin:22px 0 2px;
+  font-size:56px;
+  font-weight:900;
+  letter-spacing:-0.8px;
+  line-height:1;
+}
+
+.subtitle{
+  margin:0 0 16px;
+  font-size:14px;
+  font-weight:700;
+  color:rgba(17,17,17,.55);
+}
+
+/* Main card */
+.panel{
+  width:min(980px, 94vw);
+  margin:0 auto;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
+  border:1px solid var(--stroke);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  padding:16px 16px 14px;
+}
+
+/* HUD layout: clean grid */
+.hud{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr)) minmax(280px, 1.35fr);
+  gap:12px;
+  align-items:stretch;
+  margin-bottom:12px;
+}
+
+/* Pills */
+.pill{
+  background: rgba(255,255,255,.92);
+  border:1px solid var(--stroke);
+  border-radius: var(--radius-lg);
+  padding:12px 14px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:6px;
+  text-align:left;
+}
+
+.pill small{
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.3px;
+  color:rgba(17,17,17,.55);
+  text-transform:uppercase;
+}
+
+.pill b{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-.2px;
+}
+
+/* Rewards box */
+.rewardBox{
+  background: rgba(255,255,255,.92);
+  border:1px solid var(--stroke);
+  border-radius: var(--radius-lg);
+  padding:12px 14px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+  text-align:left;
+}
+
+.rewardTitle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 8px;
+}
+
+.rewardTitle b{
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.35px;
+  text-transform:uppercase;
+  color:rgba(17,17,17,.65);
+}
+
+.badge{
+  padding:7px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(17,17,17,.06);
+  border:1px solid rgba(17,17,17,.10);
+  font-size:12px;
+  font-weight:900;
+  color:rgba(17,17,17,.70);
+  white-space:nowrap;
+}
+
+.badge.win{
+  background: rgba(0,0,0,.88);
+  color: #fff;
+  border-color: rgba(0,0,0,.0);
+}
+
+.rewardList{
+  margin:0;
+  padding-left:18px;
+  font-size:13px;
+  line-height:1.45;
+  color:rgba(17,17,17,.78);
+}
+
+.rewardList li{ margin:4px 0; }
+
+.rewardList li.done{
+  color: rgba(0,0,0,.92);
+  font-weight:900;
+}
+
+/* Canvas */
+canvas{
+  width:min(940px, 94vw);
+  height:auto;
+  display:block;
+  margin:0 auto;
+  background:#fff;
+  border-radius: var(--radius-lg);
+  border:1px solid rgba(17,17,17,.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+  touch-action:none;
+}
+
+/* Hold bar */
+.holdbar{
+  margin:10px auto 0;
+  width:min(940px, 94vw);
+  height:10px;
+  border-radius: var(--radius-pill);
+  background: rgba(17,17,17,.08);
+  overflow:hidden;
+}
+.holdfill{
+  height:100%;
+  width:0%;
+  border-radius: var(--radius-pill);
+  background: rgba(0,0,0,.90);
+  transition: width .08s linear;
+}
+
+/* Hint */
+.hint{
+  margin:12px auto 0;
+  width:min(940px, 94vw);
+  font-size:13px;
+  line-height:1.45;
+  color: rgba(17,17,17,.68);
+}
+.hint strong{ color: rgba(0,0,0,.92); }
+
+/* Buttons */
+.btnrow{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+button{
+  border:none;
+  cursor:pointer;
+  border-radius: 999px;
+  padding:16px 32px;
+  min-width:200px;
+  min-height:56px;
+
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:.2px;
+
+  background:#111;
+  color:#fff;
+  box-shadow: 0 12px 26px rgba(0,0,0,.20);
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+
+button:active{
+  transform: translateY(1px) scale(.98);
+  box-shadow: 0 8px 18px rgba(0,0,0,.22);
+}
+
+button.secondary{
+  background: #fff;
+  color: #111;
+  border:1px solid rgba(17,17,17,.14);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+}
+
+/* Overlay (keep clean) */
+#overlay{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,.55);
+  padding:16px;
+}
+
+.modal{
+  width:min(560px, 92vw);
+  background: rgba(255,255,255,.96);
+  border-radius: var(--radius-xl);
+  padding:18px 18px 16px;
+  box-shadow: 0 18px 60px rgba(0,0,0,.35);
+  border:1px solid rgba(17,17,17,.10);
+  text-align:left;
+}
+
+.modal h1{
+  margin:4px 0 8px;
+  font-size:34px;
+  font-weight:1000;
+  letter-spacing:-.6px;
+  text-align:center;
+}
+
+.modal p{
+  margin:0;
+  text-align:center;
+  color: rgba(17,17,17,.70);
+  font-weight:700;
+  line-height:1.4;
+}
+
+.modal .scoreline{
+  margin-top:12px;
+  text-align:center;
+  font-weight:1000;
+  font-size:18px;
+}
+
+.prizeCard{
+  margin-top:12px;
+  background: rgba(255,249,217,.9);
+  border:1px solid rgba(17,17,17,.10);
+  border-radius: var(--radius-lg);
+  padding:12px;
+  text-align:center;
+}
+
+.prizeCard .label{
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.35px;
+  text-transform:uppercase;
+  color: rgba(17,17,17,.60);
+}
+
+.prizeCard .prize{
+  margin-top:6px;
+  font-size:20px;
+  font-weight:1000;
+}
+
+.prizeCard .note{
+  margin-top:6px;
+  font-size:12px;
+  color: rgba(17,17,17,.60);
+  line-height:1.4;
+}
+
+/* Mobile */
+@media (max-width: 860px){
   .hud{
-    display:flex;
-    gap:10px;
-    justify-content:space-between;
-    align-items:stretch;
-    flex-wrap:wrap;
-    margin-bottom:10px;
+    grid-template-columns: repeat(2, 1fr);
   }
-  .pill{
-    flex:1;
-    min-width:150px;
-    background:rgba(255,255,255,.78);
-    border-radius:999px;
-    padding:10px 14px;
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    align-items:center;
-    box-shadow:0 8px 18px rgba(0,0,0,.08);
-  }
-  .pill small{color:var(--muted); font-weight:800}
-  .pill b{font-size:18px}
-
   .rewardBox{
-    flex: 2;
-    min-width: 320px;
-    background:rgba(255,255,255,.78);
-    border-radius:18px;
-    padding:10px 14px;
-    box-shadow:0 8px 18px rgba(0,0,0,.08);
-    text-align:left;
+    grid-column: 1 / -1;
   }
-  .rewardTitle{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin-bottom:6px;
-  }
-  .rewardTitle b{
-    font-size:14px;
-    letter-spacing:.2px;
-  }
-  .badge{
-    background:rgba(0,0,0,.08);
-    border-radius:999px;
-    padding:6px 10px;
-    font-weight:900;
-    font-size:12px;
-    color:rgba(0,0,0,.75);
-    white-space:nowrap;
-  }
-  .badge.win{
-    background:rgba(20,184,106,.18);
-    color:#0a6b3a;
-  }
-
-  .rewardList{
-    margin:0;
-    padding-left:18px;
-    color:rgba(0,0,0,.78);
-    font-size:13px;
-    line-height:1.35;
-  }
-  .rewardList li{
-    margin:2px 0;
-  }
-  .rewardList li.done{
-    color:#0a6b3a;
-    font-weight:800;
-  }
-
-  canvas{
-    width:min(96vw, 940px);
-    height:auto;
-    background:#fff;
-    border-radius:18px;
-    display:block;
-    margin:0 auto;
-    box-shadow:0 10px 28px rgba(0,0,0,.12);
-    touch-action:none;
-  }
-
-  .hint{
-    margin:10px 0 0;
-    font-size:14px;
-    color:rgba(0,0,0,.78);
-    line-height:1.35;
-  }
-  .hint strong{color:#000}
-
-  .btnrow{
-    display:flex;
-    gap:12px;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-top:12px;
-  }
-
   button{
-    background:var(--realme-yellow);
-    color:var(--ink);
-    border:none;
-    border-radius:28px;
-    font-size:22px;
-    font-weight:800;
-    padding:18px 45px;
-    min-width:190px;
-    min-height:64px;
-    box-shadow:0 10px 25px rgba(0,0,0,.22);
-    cursor:pointer;
-    transition:all .18s ease;
+    width:86%;
+    font-size:20px;
+    padding:18px 0;
   }
-  button.secondary{ background:#fff; }
-  button:active{
-    transform:scale(.96);
-    box-shadow:0 6px 16px rgba(0,0,0,.28);
-  }
-
-  @media (max-width:768px){
-    button{
-      width:85%;
-      font-size:26px;
-      padding:22px 0;
-      border-radius:35px;
-    }
-    .pill{min-width:0}
-    .rewardBox{min-width:0}
-    .logo{font-size:48px}
-  }
-
-  .holdbar{
-    margin:10px auto 0;
-    width:min(96vw, 940px);
-    height:10px;
-    border-radius:999px;
-    background:rgba(255,255,255,.65);
-    overflow:hidden;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-  }
-  .holdfill{
-    height:100%;
-    width:0%;
-    background:rgba(0,0,0,.85);
-    border-radius:999px;
-    transition:width .08s linear;
-  }
-
-  #overlay{
-    position:fixed;
-    inset:0;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    background:rgba(0,0,0,.55);
-    padding:16px;
-  }
-  .modal{
-    width:min(92vw, 580px);
-    background:rgba(255,255,255,.92);
-    border-radius:26px;
-    padding:18px 18px 16px;
-    box-shadow:0 18px 50px rgba(0,0,0,.35);
-    text-align:left;
-  }
-  .modal h1{
-    margin:6px 0 6px;
-    font-size:42px;
-    letter-spacing:1px;
-    text-align:center;
-  }
-  .modal p{
-    margin:0;
-    color:rgba(0,0,0,.75);
-    font-size:18px;
-    line-height:1.35;
-    text-align:center;
-  }
-  .modal .scoreline{
-    margin-top:12px;
-    font-size:18px;
-    font-weight:900;
-    text-align:center;
-  }
-  .prizeCard{
-    margin-top:12px;
-    background:rgba(255,255,255,.85);
-    border-radius:16px;
-    padding:12px 12px;
-    box-shadow:0 8px 18px rgba(0,0,0,.10);
-    text-align:center;
-  }
-  .prizeCard .label{
-    font-size:13px;
-    color:rgba(0,0,0,.65);
-    font-weight:800;
-    margin-bottom:6px;
-  }
-  .prizeCard .prize{
-    font-size:22px;
-    font-weight:900;
-    color:#000;
-  }
-  .prizeCard .note{
-    margin-top:6px;
-    font-size:13px;
-    color:rgba(0,0,0,.65);
-    line-height:1.35;
-  }
+  .logo{ font-size:48px; }
+}
 </style>
 </head>
 
@@ -806,3 +882,4 @@ drawPlayer();
 </script>
 </body>
 </html>
+
