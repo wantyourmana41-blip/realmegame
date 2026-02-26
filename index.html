@@ -2,497 +2,170 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>realme Jump Challenge</title>
-/* ===== BIG PREMIUM BUTTON ===== */
+
+<style>
+:root{
+  --realme-yellow:#FFD400;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--realme-yellow);
+  font-family:Arial, sans-serif;
+  text-align:center;
+  overflow:hidden;
+  touch-action:manipulation;
+}
+
+.logo{
+  font-size:48px;
+  font-weight:900;
+  margin-top:20px;
+}
+
+canvas{
+  background:#fff;
+  border-radius:20px;
+  margin:20px auto;
+  display:block;
+  max-width:95vw;
+}
 
 button{
   background:#FFD400;
-  color:#111;
   border:none;
-  border-radius:28px;
-
-  font-size:22px;
+  border-radius:30px;
+  font-size:24px;
   font-weight:700;
-
-  padding:18px 45px;
-  min-width:180px;
-  min-height:65px;
-
-  box-shadow:0 10px 25px rgba(0,0,0,.25);
+  padding:20px 40px;
+  min-width:200px;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
   cursor:pointer;
-  transition:all .2s ease;
-}
-
-button:hover{
-  transform:translateY(-2px);
+  transition:.2s;
 }
 
 button:active{
-  transform:scale(0.96);
-  box-shadow:0 5px 15px rgba(0,0,0,.3);
+  transform:scale(.95);
 }
-
-
-/* ===== MOBILE VERSION ใหญ่พิเศษ ===== */
-
-@media (max-width:768px){
-  button{
-    width:85%;
-    font-size:26px;
-    padding:22px 0;
-    border-radius:35px;
-  }
-}
+</style>
 </head>
+
 <body>
 
 <div class="logo">realme</div>
-<div class="sub">Jump • Double Jump • Slide • Collect Stars</div>
 
-<canvas id="game" width="800" height="320"></canvas>
+<canvas id="game" width="900" height="350"></canvas>
 
-<div id="hud">
-  <div class="pill" id="scorePill">Score: 0</div>
-  <div class="pill" id="goalPill">Goal: 25</div>
-  <div class="pill" id="tipsPill">Space/Click: Jump • S/↓: Slide</div>
-</div>
-
-<div id="overlay">
-  <div class="panel">
-    <div class="title" id="resultText">realme Jump Challenge</div>
-    <div class="desc" id="resultDesc">
-      กด <b>Space</b> หรือ <b>คลิก</b> เพื่อกระโดด (กระโดดได้ 2 ชั้น)<br>
-      กดค้าง <b>S</b> หรือ <b>↓</b> เพื่อสไลด์หลบสิ่งกีดขวาง<br>
-      เก็บ <b>ดาว</b> เพื่อรับคะแนนโบนัส ✨
-    </div>
-    <button onclick="startGame()">Start</button>
-    <button onclick="restart()" style="display:none" id="restartBtn">Play Again</button>
-  </div>
-</div>
+<br>
+<button onclick="startGame()">Start</button>
 
 <script>
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-const W = canvas.width;
-const H = canvas.height;
+let player = {x:100,y:250,w:40,h:40,vy:0,jumps:0};
+let gravity=0.8;
+let obstacles=[];
+let sliding=false;
+let running=false;
 
-const UI = {
-  scorePill: document.getElementById("scorePill"),
-  goalPill: document.getElementById("goalPill"),
-  overlay: document.getElementById("overlay"),
-  resultText: document.getElementById("resultText"),
-  resultDesc: document.getElementById("resultDesc"),
-  restartBtn: document.getElementById("restartBtn"),
-};
-
-let running = false;
-let gameOver = false;
-
-const goal = 25;
-UI.goalPill.textContent = "Goal: " + goal;
-
-const groundY = 250;
-
-let player, obstacles, stars, score, speed, frame, spawnCooldown, starCooldown;
-let slideHeld = false;
-
-function resetState(){
-  player = {
-    x: 120,
-    y: groundY - 62,
-    w: 46,
-    h: 62,
-    vy: 0,
-    onGround: true,
-    jumpsLeft: 2,
-    slide: false,
-    slideTimer: 0,
-  };
-
-  obstacles = [];
-  stars = [];
-  score = 0;
-  speed = 6.2;
-  frame = 0;
-  spawnCooldown = 0;
-  starCooldown = 0;
-
-  gameOver = false;
-}
-
-function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
-
-function roundedRect(x, y, w, h, r){
-  const rr = Math.min(r, w/2, h/2);
-  ctx.beginPath();
-  ctx.moveTo(x+rr, y);
-  ctx.arcTo(x+w, y, x+w, y+h, rr);
-  ctx.arcTo(x+w, y+h, x, y+h, rr);
-  ctx.arcTo(x, y+h, x, y, rr);
-  ctx.arcTo(x, y, x+w, y, rr);
-  ctx.closePath();
-}
-
-function drawPhone(px, py, pw, ph){
-  // shadow
-  ctx.fillStyle = "rgba(0,0,0,.18)";
-  roundedRect(px+3, py+6, pw, ph, 12);
-  ctx.fill();
-
-  // body
-  ctx.fillStyle = "#111";
-  roundedRect(px, py, pw, ph, 12);
-  ctx.fill();
-
-  // screen
-  ctx.fillStyle = "#0b2a44";
-  roundedRect(px+5, py+8, pw-10, ph-18, 10);
-  ctx.fill();
-
-  // screen gradient lines
-  ctx.globalAlpha = 0.25;
-  ctx.fillStyle = "#5ee3ff";
-  roundedRect(px+8, py+12, pw-16, 10, 6);
-  ctx.fill();
-  ctx.globalAlpha = 1;
-
-  // logo on phone
-  ctx.fillStyle = "#FFD400";
-  ctx.font = "bold 11px Arial";
-  ctx.fillText("realme", px+10, py+ph-10);
-
-  // camera dot
-  ctx.fillStyle = "#222";
-  ctx.beginPath();
-  ctx.arc(px + pw/2, py + 10, 2.2, 0, Math.PI*2);
-  ctx.fill();
-}
-
-function spawnObstacle(){
-  const type = Math.random() < 0.55 ? "low" : "tall";
-  if(type === "low"){
-    obstacles.push({ x: W + 30, y: groundY - 28, w: 34, h: 28, type });
-  }else{
-    obstacles.push({ x: W + 30, y: groundY - 70, w: 26, h: 70, type });
-  }
-}
-
-function spawnStar(){
-  // put star at a random height range where it's collectible
-  const y = (Math.random() < 0.5) ? (groundY - 120) : (groundY - 80);
-  stars.push({ x: W + 30, y, r: 10, spin: 0 });
+function startGame(){
+  running=true;
+  player.y=250;
+  player.vy=0;
+  player.jumps=0;
+  obstacles=[];
 }
 
 function jump(){
-  if(!running || gameOver) return;
-  if(player.jumpsLeft <= 0) return;
-
-  player.vy = -12.5;
-  player.onGround = false;
-  player.jumpsLeft--;
+  if(player.jumps<2){
+    player.vy=-12;
+    player.jumps++;
+  }
 }
 
-function setSlide(active){
-  if(!running || gameOver) return;
-  player.slide = active;
+function setSlide(state){
+  sliding=state;
+  player.h = state ? 20 : 40;
 }
 
-function rectsOverlap(a, b){
-  return (
-    a.x < b.x + b.w &&
-    a.x + a.w > b.x &&
-    a.y < b.y + b.h &&
-    a.y + a.h > b.y
-  );
+function spawnObstacle(){
+  obstacles.push({x:canvas.width,y:250,w:30,h:40});
 }
 
-function circleRectCollide(cx, cy, r, rx, ry, rw, rh){
-  const closestX = clamp(cx, rx, rx+rw);
-  const closestY = clamp(cy, ry, ry+rh);
-  const dx = cx - closestX;
-  const dy = cy - closestY;
-  return (dx*dx + dy*dy) <= r*r;
-}
+setInterval(spawnObstacle,2000);
 
 function update(){
-  if(!running || gameOver) return;
+  if(!running) return;
 
-  frame++;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // speed scales slightly with score
-  speed = 6.2 + Math.min(4.0, score * 0.06);
+  player.vy+=gravity;
+  player.y+=player.vy;
 
-  // gravity
-  player.vy += 0.65;
-  player.y += player.vy;
-
-  // ground collision
-  const targetH = player.slide ? 38 : 62;
-  player.h = targetH;
-
-  const groundTop = groundY - player.h;
-  if(player.y >= groundTop){
-    player.y = groundTop;
-    player.vy = 0;
-    if(!player.onGround){
-      player.onGround = true;
-      player.jumpsLeft = 2;
-    }
-  }else{
-    player.onGround = false;
+  if(player.y>=250){
+    player.y=250;
+    player.vy=0;
+    player.jumps=0;
   }
 
-  // slide hold
-  if(slideHeld && player.onGround) setSlide(true);
-  if(!slideHeld) setSlide(false);
+  ctx.fillStyle="black";
+  ctx.fillRect(player.x,player.y,player.w,player.h);
 
-  // spawn logic with cooldown for stability
-  spawnCooldown--;
-  if(spawnCooldown <= 0){
-    if(Math.random() < 0.55){
-      spawnObstacle();
-      spawnCooldown = Math.floor(42 - Math.min(18, score)); // more frequent later
-    }else{
-      spawnCooldown = 10;
+  for(let i=0;i<obstacles.length;i++){
+    obstacles[i].x-=6;
+    ctx.fillRect(obstacles[i].x,obstacles[i].y,obstacles[i].w,obstacles[i].h);
+
+    if(player.x<obstacles[i].x+obstacles[i].w &&
+       player.x+player.w>obstacles[i].x &&
+       player.y<obstacles[i].y+obstacles[i].h &&
+       player.y+player.h>obstacles[i].y){
+         running=false;
+         alert("Game Over");
     }
   }
 
-  starCooldown--;
-  if(starCooldown <= 0){
-    if(Math.random() < 0.35){
-      spawnStar();
-      starCooldown = 90 + Math.floor(Math.random()*60);
-    }else{
-      starCooldown = 35;
-    }
-  }
-
-  // move obstacles
-  for(let i = obstacles.length-1; i >= 0; i--){
-    const o = obstacles[i];
-    o.x -= speed;
-
-    if(o.x + o.w < -20){
-      obstacles.splice(i,1);
-      score++;
-      if(score >= goal){
-        endGame(true);
-      }
-    }
-  }
-
-  // move stars
-  for(let i = stars.length-1; i >= 0; i--){
-    const s = stars[i];
-    s.x -= speed;
-    s.spin += 0.12;
-
-    if(s.x + s.r < -20){
-      stars.splice(i,1);
-    }
-  }
-
-  // collisions
-  const pBox = { x: player.x, y: player.y, w: player.w, h: player.h };
-
-  // obstacle hit
-  for(const o of obstacles){
-    if(rectsOverlap(pBox, o)){
-      endGame(false);
-      break;
-    }
-  }
-
-  // star collect
-  for(let i = stars.length-1; i >= 0; i--){
-    const s = stars[i];
-    if(circleRectCollide(s.x, s.y, s.r+4, pBox.x, pBox.y, pBox.w, pBox.h)){
-      stars.splice(i,1);
-      score += 2; // bonus
-      if(score >= goal){
-        endGame(true);
-      }
-    }
-  }
-
-  UI.scorePill.textContent = "Score: " + score;
+  requestAnimationFrame(update);
 }
 
-function drawBackground(){
-  // sky
-  ctx.clearRect(0,0,W,H);
+update();
 
-  // soft top gradient
-  const g = ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0, "#ffffff");
-  g.addColorStop(1, "#fff7c7");
-  ctx.fillStyle = g;
-  ctx.fillRect(0,0,W,H);
 
-  // clouds
-  function cloud(x, y, s){
-    ctx.fillStyle = "rgba(255,255,255,.9)";
-    ctx.beginPath();
-    ctx.arc(x, y, 16*s, 0, Math.PI*2);
-    ctx.arc(x+18*s, y-8*s, 18*s, 0, Math.PI*2);
-    ctx.arc(x+40*s, y, 16*s, 0, Math.PI*2);
-    ctx.closePath();
-    ctx.fill();
-  }
+// =======================
+// 🔥 MOBILE FULL SCREEN TOUCH CONTROL
+// =======================
 
-  const cx1 = (frame*0.4) % (W+200) - 100;
-  const cx2 = (frame*0.25) % (W+260) - 130;
-  cloud(W - cx1, 70, 1.0);
-  cloud(W - cx2, 110, 1.2);
-  cloud(W - (cx1*0.7), 55, 0.8);
+let holdTimer=null;
+let holding=false;
 
-  // ground
-  ctx.fillStyle = "#111";
-  ctx.fillRect(0, groundY, W, 4);
-
-  // dotted lane
-  ctx.globalAlpha = 0.22;
-  ctx.fillStyle = "#111";
-  for(let x=0; x<W; x+=36){
-    ctx.fillRect((x - (frame*speed)%36), groundY+18, 18, 3);
-  }
-  ctx.globalAlpha = 1;
-}
-
-function drawObstacle(o){
-  // obstacle style
-  ctx.fillStyle = "#111";
-  roundedRect(o.x, o.y, o.w, o.h, 8);
-  ctx.fill();
-
-  // highlight
-  ctx.globalAlpha = 0.12;
-  ctx.fillStyle = "#FFD400";
-  roundedRect(o.x+3, o.y+4, o.w-6, Math.max(10, o.h*0.25), 7);
-  ctx.fill();
-  ctx.globalAlpha = 1;
-}
-
-function drawStar(s){
-  // simple spinning star
-  ctx.save();
-  ctx.translate(s.x, s.y);
-  ctx.rotate(s.spin);
-  ctx.fillStyle = "#FFD400";
-  ctx.beginPath();
-  for(let i=0; i<10; i++){
-    const a = i * Math.PI/5;
-    const r = (i%2===0) ? s.r : s.r*0.45;
-    ctx.lineTo(Math.cos(a)*r, Math.sin(a)*r);
-  }
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.globalAlpha = 0.2;
-  ctx.fillStyle = "#111";
-  ctx.beginPath();
-  ctx.arc(0,0, s.r+4, 0, Math.PI*2);
-  ctx.fill();
-  ctx.globalAlpha = 1;
-
-  ctx.restore();
-}
-
-function draw(){
-  drawBackground();
-
-  // stars
-  for(const s of stars) drawStar(s);
-
-  // obstacles
-  for(const o of obstacles) drawObstacle(o);
-
-  // player phone + slide effect
-  const px = player.x;
-  const py = player.y;
-  drawPhone(px, py, player.w, player.h);
-
-  // dust when sliding
-  if(player.slide && player.onGround){
-    ctx.globalAlpha = 0.35;
-    ctx.fillStyle = "#111";
-    ctx.beginPath();
-    ctx.arc(px-6, groundY+2, 6, 0, Math.PI*2);
-    ctx.arc(px-18, groundY+2, 4, 0, Math.PI*2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-
-  // top text
-  ctx.fillStyle = "#111";
-  ctx.font = "bold 18px Arial";
-  ctx.fillText("realme Jump Challenge", 20, 28);
-
-  ctx.font = "14px Arial";
-  ctx.globalAlpha = 0.7;
-  ctx.fillText("Space/Click = Jump (2x) • Hold S/↓ = Slide • Collect Stars = +2", 20, 48);
-  ctx.globalAlpha = 1;
-}
-
-function loop(){
-  update();
-  draw();
-  requestAnimationFrame(loop);
-}
-
-function endGame(win){
-  gameOver = true;
-  running = false;
-  UI.overlay.classList.remove("hidden");
-  UI.restartBtn.style.display = "inline-block";
-
-  UI.resultText.textContent = win ? "REALME FAN 🎉" : "GAME OVER";
-  UI.resultDesc.innerHTML = win
-    ? `คุณชนะแล้ว! คะแนน <b>${score}</b> / ${goal}<br>แชร์ให้เพื่อนลองเล่นได้เลย 😄`
-    : `โดนสิ่งกีดขวางแล้ว 😭 คะแนน <b>${score}</b> / ${goal}<br>ทริค: ใช้ <b>Slide</b> หลบแท่งสูง + เก็บดาวเพิ่มแต้ม`;
-}
-
-function startGame(){
-  resetState();
-  UI.overlay.classList.add("hidden");
-  UI.restartBtn.style.display = "none";
-  running = true;
-}
-
-function restart(){
-  startGame();
-}
-
-// Controls
-document.addEventListener("keydown", (e)=>{
-  if(e.code === "Space"){ e.preventDefault(); if(!running && !gameOver) startGame(); jump(); }
-  if(e.code === "KeyS" || e.code === "ArrowDown"){ slideHeld = true; }
-});
-
-document.addEventListener("keyup", (e)=>{
-  if(e.code === "KeyS" || e.code === "ArrowDown"){ slideHeld = false; }
-});
-
-canvas.addEventListener("click", ()=>{
-  if(!running && !gameOver){ startGame(); return; }
-  jump();
-});
-
-// Touch support
-canvas.addEventListener("touchstart", (e)=>{
+document.addEventListener("touchstart", function(e){
   e.preventDefault();
-  if(!running && !gameOver){ startGame(); return; }
-  jump();
+  holding=false;
+  holdTimer=setTimeout(()=>{
+    holding=true;
+    setSlide(true);
+  },150);
 },{passive:false});
 
-// initial overlay
-UI.overlay.classList.remove("hidden");
-resetState();
-loop();
+document.addEventListener("touchend", function(e){
+  e.preventDefault();
+  clearTimeout(holdTimer);
+  if(holding){
+    setSlide(false);
+  }else{
+    jump();
+  }
+},{passive:false});
+
+// Desktop
+document.addEventListener("pointerdown", function(e){
+  if(e.target.tagName==="BUTTON") return;
+  jump();
+});
 </script>
 
 </body>
 </html>
-
