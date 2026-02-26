@@ -9,9 +9,9 @@
   :root{
     --realme-yellow:#FFD400;
     --ink:#111;
-    --card:#ffffff;
     --shadow: rgba(0,0,0,.18);
     --muted: rgba(0,0,0,.65);
+    --good:#14b86a;
   }
   *{box-sizing:border-box}
   html,body{
@@ -53,7 +53,7 @@
     display:flex;
     gap:10px;
     justify-content:space-between;
-    align-items:center;
+    align-items:stretch;
     flex-wrap:wrap;
     margin-bottom:10px;
   }
@@ -71,6 +71,55 @@
   }
   .pill small{color:var(--muted); font-weight:800}
   .pill b{font-size:18px}
+
+  .rewardBox{
+    flex: 2;
+    min-width: 320px;
+    background:rgba(255,255,255,.78);
+    border-radius:18px;
+    padding:10px 14px;
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    text-align:left;
+  }
+  .rewardTitle{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .rewardTitle b{
+    font-size:14px;
+    letter-spacing:.2px;
+  }
+  .badge{
+    background:rgba(0,0,0,.08);
+    border-radius:999px;
+    padding:6px 10px;
+    font-weight:900;
+    font-size:12px;
+    color:rgba(0,0,0,.75);
+    white-space:nowrap;
+  }
+  .badge.win{
+    background:rgba(20,184,106,.18);
+    color:#0a6b3a;
+  }
+
+  .rewardList{
+    margin:0;
+    padding-left:18px;
+    color:rgba(0,0,0,.78);
+    font-size:13px;
+    line-height:1.35;
+  }
+  .rewardList li{
+    margin:2px 0;
+  }
+  .rewardList li.done{
+    color:#0a6b3a;
+    font-weight:800;
+  }
 
   canvas{
     width:min(96vw, 940px);
@@ -99,7 +148,6 @@
     margin-top:12px;
   }
 
-  /* BIG PREMIUM BUTTON */
   button{
     background:var(--realme-yellow);
     color:var(--ink);
@@ -128,10 +176,10 @@
       border-radius:35px;
     }
     .pill{min-width:0}
+    .rewardBox{min-width:0}
     .logo{font-size:48px}
   }
 
-  /* Hold indicator */
   .holdbar{
     margin:10px auto 0;
     width:min(96vw, 940px);
@@ -149,7 +197,6 @@
     transition:width .08s linear;
   }
 
-  /* Overlay */
   #overlay{
     position:fixed;
     inset:0;
@@ -160,27 +207,56 @@
     padding:16px;
   }
   .modal{
-    width:min(92vw, 560px);
+    width:min(92vw, 580px);
     background:rgba(255,255,255,.92);
     border-radius:26px;
     padding:18px 18px 16px;
     box-shadow:0 18px 50px rgba(0,0,0,.35);
+    text-align:left;
   }
   .modal h1{
     margin:6px 0 6px;
-    font-size:44px;
+    font-size:42px;
     letter-spacing:1px;
+    text-align:center;
   }
   .modal p{
     margin:0;
     color:rgba(0,0,0,.75);
     font-size:18px;
     line-height:1.35;
+    text-align:center;
   }
   .modal .scoreline{
-    margin-top:10px;
+    margin-top:12px;
     font-size:18px;
     font-weight:900;
+    text-align:center;
+  }
+  .prizeCard{
+    margin-top:12px;
+    background:rgba(255,255,255,.85);
+    border-radius:16px;
+    padding:12px 12px;
+    box-shadow:0 8px 18px rgba(0,0,0,.10);
+    text-align:center;
+  }
+  .prizeCard .label{
+    font-size:13px;
+    color:rgba(0,0,0,.65);
+    font-weight:800;
+    margin-bottom:6px;
+  }
+  .prizeCard .prize{
+    font-size:22px;
+    font-weight:900;
+    color:#000;
+  }
+  .prizeCard .note{
+    margin-top:6px;
+    font-size:13px;
+    color:rgba(0,0,0,.65);
+    line-height:1.35;
   }
 </style>
 </head>
@@ -192,8 +268,20 @@
   <div class="panel">
     <div class="hud">
       <div class="pill"><small>Score</small><b id="score">0</b></div>
-      <div class="pill"><small>Goal</small><b id="goal">25</b></div>
+      <div class="pill"><small>Goal</small><b id="goal">400</b></div>
       <div class="pill"><small>High</small><b id="high">0</b></div>
+
+      <div class="rewardBox">
+        <div class="rewardTitle">
+          <b>🎁 Rewards (ตามคะแนน)</b>
+          <span class="badge" id="rewardBadge">Keep playing</span>
+        </div>
+        <ul class="rewardList" id="rewardList">
+          <li id="r100">≥ 100 : Voucher discount 333</li>
+          <li id="r200">≥ 200 : realme bag</li>
+          <li id="r400">≥ 400 : realme speaker</li>
+        </ul>
+      </div>
     </div>
 
     <canvas id="game" width="920" height="360"></canvas>
@@ -215,8 +303,17 @@
     <div class="modal">
       <h1 id="ovTitle">GAME OVER</h1>
       <p id="ovDesc">โดนสิ่งกีดขวางแล้ว 😭</p>
-      <div class="scoreline">คะแนน: <span id="ovScore">0</span> / <span id="ovGoal">25</span></div>
-      <div class="btnrow" style="margin-top:14px">
+      <div class="scoreline">คะแนน: <span id="ovScore">0</span> / <span id="ovGoal">400</span></div>
+
+      <div class="prizeCard">
+        <div class="label">🎁 Your reward</div>
+        <div class="prize" id="ovPrize">—</div>
+        <div class="note" id="ovPrizeNote">
+          *รางวัลเป็นเงื่อนไขตัวอย่างสำหรับเกมหน้าเว็บ (ปรับได้ตามแคมเปญ)
+        </div>
+      </div>
+
+      <div class="btnrow" style="margin-top:14px; justify-content:center;">
         <button id="playAgainBtn">Play Again</button>
         <button class="secondary" id="closeBtn">Close</button>
       </div>
@@ -225,11 +322,12 @@
 
 <script>
 /* =========================
-   realme Jump Challenge (stable)
-   - Fix: double jump on mobile
-   - Fix: no duplicate events (touch vs pointer)
-   - Tap anywhere = jump, hold = slide
-   - Stars +2, survive +1
+   realme Jump Challenge (Rewards)
+   Goal = 400
+   Rewards:
+   - >=100 : Voucher discount 333
+   - >=200 : realme bag
+   - >=400 : realme speaker
    ========================= */
 
 const canvas = document.getElementById("game");
@@ -251,12 +349,26 @@ const ovGoal  = document.getElementById("ovGoal");
 const playAgainBtn = document.getElementById("playAgainBtn");
 const closeBtn = document.getElementById("closeBtn");
 
+const ovPrize = document.getElementById("ovPrize");
+const ovPrizeNote = document.getElementById("ovPrizeNote");
+
+const rewardBadge = document.getElementById("rewardBadge");
+const r100 = document.getElementById("r100");
+const r200 = document.getElementById("r200");
+const r400 = document.getElementById("r400");
+
 const IS_TOUCH = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
 
-// config
-const GOAL = 25;
+// ===== config =====
+const GOAL = 400;
 goalEl.textContent = GOAL;
 ovGoal.textContent = GOAL;
+
+const REWARDS = [
+  { score: 100, name: "Voucher discount 333" },
+  { score: 200, name: "realme bag" },
+  { score: 400, name: "realme speaker" },
+];
 
 let highScore = Number(localStorage.getItem("realme_highscore") || 0);
 highEl.textContent = highScore;
@@ -287,6 +399,39 @@ let obstacles = [];
 let stars = [];
 let spawnT = 0;
 let starSpawnT = 0;
+let surviveAcc = 0;
+
+function getRewardByScore(s){
+  if(s >= 400) return "realme speaker";
+  if(s >= 200) return "realme bag";
+  if(s >= 100) return "Voucher discount 333";
+  return "—";
+}
+
+function updateRewardUI(){
+  // list highlight
+  r100.classList.toggle("done", score >= 100);
+  r200.classList.toggle("done", score >= 200);
+  r400.classList.toggle("done", score >= 400);
+
+  const rewardNow = getRewardByScore(score);
+
+  if(score >= 400){
+    rewardBadge.textContent = "Unlocked: speaker";
+    rewardBadge.classList.add("win");
+  }else if(score >= 200){
+    rewardBadge.textContent = "Unlocked: bag";
+    rewardBadge.classList.add("win");
+  }else if(score >= 100){
+    rewardBadge.textContent = "Unlocked: voucher";
+    rewardBadge.classList.add("win");
+  }else{
+    rewardBadge.textContent = "Keep playing";
+    rewardBadge.classList.remove("win");
+  }
+
+  return rewardNow;
+}
 
 function resetGame(){
   running = false;
@@ -306,6 +451,8 @@ function resetGame(){
   starSpawnT = 0;
   surviveAcc = 0;
   holdFillEl.style.width = "0%";
+
+  updateRewardUI();
 }
 
 function startGame(){
@@ -325,12 +472,17 @@ function endGame(type){
     highEl.textContent = highScore;
   }
 
+  const reward = getRewardByScore(score);
+  ovPrize.textContent = reward;
+
   if(type === "win"){
     ovTitle.textContent = "YOU WIN!";
-    ovDesc.textContent = "ยินดีด้วย! คุณเป็น realme FAN 🎉";
+    ovDesc.textContent = "คะแนนครบ 400 แล้ว 🎉";
+    ovPrizeNote.textContent = "*ระบบแสดงรางวัลตามคะแนน (ปรับเงื่อนไขได้ตามแคมเปญจริง)";
   }else{
     ovTitle.textContent = "GAME OVER";
     ovDesc.textContent = "โดนสิ่งกีดขวางแล้ว 😭";
+    ovPrizeNote.textContent = "*ทริค: กดค้าง Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม";
   }
 
   ovScore.textContent = score;
@@ -339,7 +491,9 @@ function endGame(type){
 
 function addScore(n){
   score += n;
+  if(score > GOAL) score = GOAL; // cap
   scoreEl.textContent = score;
+  updateRewardUI();
   if(score >= GOAL){
     endGame("win");
   }
@@ -451,6 +605,7 @@ function drawObstacle(o){
 function drawStar(s){
   ctx.save();
   ctx.translate(s.x, s.y);
+
   ctx.fillStyle = "rgba(255,212,0,.35)";
   ctx.beginPath();
   ctx.arc(0,0,20,0,Math.PI*2);
@@ -470,7 +625,6 @@ function drawStar(s){
   ctx.restore();
 }
 
-let surviveAcc = 0;
 function tickSurvive(dt){
   surviveAcc += dt;
   if(surviveAcc >= 0.7){
@@ -485,16 +639,16 @@ function loop(t){
   const dt = Math.min(0.033, (t - lastTime)/1000 || 0);
   lastTime = t;
 
-  const speed = speedBase + Math.min(260, score * 12);
+  const speed = speedBase + Math.min(340, score * 0.9); // speed scale w/ score
 
   spawnT += dt;
   starSpawnT += dt;
 
-  if(spawnT > (1.15 + Math.random()*0.6)){
+  if(spawnT > (1.05 + Math.random()*0.65)){
     spawnObstacle();
     spawnT = 0;
   }
-  if(starSpawnT > (1.0 + Math.random()*1.2)){
+  if(starSpawnT > (0.95 + Math.random()*1.25)){
     spawnStar();
     starSpawnT = 0;
   }
@@ -506,22 +660,21 @@ function loop(t){
   if(player.y + player.h >= groundY){
     player.y = groundY - player.h;
     player.vy = 0;
-    player.jumps = 0; // ✅ reset jumps only when grounded
+    player.jumps = 0; // reset jumps when grounded
   }
 
-  // move
   for(const o of obstacles) o.x -= speed * dt;
   obstacles = obstacles.filter(o => o.x + o.w > -30);
 
   for(const s of stars) s.x -= (speed * 0.95) * dt;
   stars = stars.filter(s => s.x > -40 && !s.taken);
 
-  // collisions
   for(const o of obstacles){
     if(aabb(player.x, player.y, player.w, player.h, o.x, o.y, o.w, o.h)){
       endGame("lose"); return;
     }
   }
+
   for(const s of stars){
     const bx = s.x - s.r, by = s.y - s.r, bw = s.r*2, bh = s.r*2;
     if(aabb(player.x, player.y, player.w, player.h, bx, by, bw, bh)){
@@ -532,7 +685,6 @@ function loop(t){
 
   tickSurvive(dt);
 
-  // render
   ctx.clearRect(0,0,canvas.width,canvas.height);
   drawBackground();
   for(const s of stars) drawStar(s);
@@ -544,7 +696,7 @@ function loop(t){
 
 /* =========================
    INPUT (Stable)
-   Mobile: touch only (no pointer duplicate)
+   Mobile: touch only (avoid pointer duplicate)
    Desktop: pointer + keyboard
    ========================= */
 let holdTimer = null;
@@ -574,7 +726,7 @@ function onTouchStart(e){
 
   if(!running){
     startGame();
-    // ให้เริ่มแล้วกระโดดได้ทันที 1 ครั้ง
+    // เริ่มแล้วให้กระโดดได้ทันที 1 ครั้ง (ฟีลลื่น)
     setTimeout(() => jump(), 0);
     return;
   }
@@ -609,15 +761,13 @@ document.addEventListener("touchstart", onTouchStart, {passive:false});
 document.addEventListener("touchend", onTouchEnd, {passive:false});
 document.addEventListener("touchcancel", onTouchEnd, {passive:false});
 
-// Desktop pointer (disable on touch devices to avoid duplicate)
 document.addEventListener("pointerdown", (e) => {
-  if(IS_TOUCH) return;
+  if(IS_TOUCH) return;               // IMPORTANT: no duplicate on mobile
   if(e.target.closest("button")) return;
   if(!running){ startGame(); return; }
   jump();
 });
 
-// Keyboard
 document.addEventListener("keydown", (e) => {
   if(e.code === "Space"){
     e.preventDefault();
@@ -643,11 +793,13 @@ closeBtn.addEventListener("click", () => overlay.style.display = "none");
 howBtn.addEventListener("click", () => {
   overlay.style.display = "flex";
   ovTitle.textContent = "HOW TO PLAY";
-  ovDesc.textContent = "แตะ = Jump • แตะซ้ำได้ (Double Jump) • กดค้าง = Slide • เก็บดาว +2";
+  ovDesc.textContent = "แตะ = Jump (2x) • กดค้าง = Slide • เก็บดาว +2 • เป้าหมาย 400";
   ovScore.textContent = score;
+  ovPrize.textContent = getRewardByScore(score);
+  ovPrizeNote.textContent = "*ถึง 100/200/400 จะได้รางวัลตามเงื่อนไข";
 });
 
-// init screen
+// init
 resetGame();
 drawBackground();
 drawPlayer();
