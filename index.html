@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>realme Jump Challenge</title>
 
 <style>
@@ -11,11 +11,8 @@
     --ink:#111;
     --card:#ffffff;
     --shadow: rgba(0,0,0,.18);
-    --muted: rgba(0,0,0,.6);
-    --good:#1dbf73;
-    --bad:#ff4d4f;
+    --muted: rgba(0,0,0,.65);
   }
-
   *{box-sizing:border-box}
   html,body{
     height:100%;
@@ -23,82 +20,77 @@
     background:var(--realme-yellow);
     font-family: Arial, sans-serif;
     text-align:center;
-    overflow:hidden;                 /* กันเลื่อน */
+    overflow:hidden;
     overscroll-behavior:none;
-    touch-action: manipulation;      /* ลด double-tap zoom */
+    touch-action:manipulation;
     -webkit-user-select:none;
     user-select:none;
   }
 
-  .wrap{
-    max-width:980px;
-    margin:0 auto;
-    padding:14px 12px 18px;
-  }
-
-  .brand{
-    font-size:54px;
+  .logo{
+    font-size:56px;
     font-weight:900;
-    letter-spacing:.5px;
     color:var(--ink);
-    margin:8px 0 2px;
+    margin-top:18px;
+    letter-spacing:.5px;
   }
-  .sub{
-    margin:0 0 10px;
+  .subtitle{
+    margin:4px 0 10px;
+    color:rgba(0,0,0,.7);
     font-size:14px;
-    color:rgba(0,0,0,.65);
   }
 
-  .card{
-    background:rgba(255,255,255,.55);
+  .panel{
+    width:min(96vw, 980px);
+    margin:0 auto;
+    background:rgba(255,255,255,.58);
     border-radius:22px;
     padding:14px 14px 12px;
     box-shadow:0 16px 34px var(--shadow);
   }
 
-  .toprow{
+  .hud{
     display:flex;
     gap:10px;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
     flex-wrap:wrap;
     margin-bottom:10px;
   }
-
   .pill{
-    background:rgba(255,255,255,.75);
+    flex:1;
+    min-width:150px;
+    background:rgba(255,255,255,.78);
     border-radius:999px;
     padding:10px 14px;
-    min-width:140px;
     display:flex;
-    gap:8px;
+    gap:10px;
     justify-content:center;
     align-items:center;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
   }
+  .pill small{color:var(--muted); font-weight:800}
   .pill b{font-size:18px}
-  .pill small{color:var(--muted); font-weight:700}
 
   canvas{
-    width:min(96vw, 920px);
+    width:min(96vw, 940px);
     height:auto;
     background:#fff;
     border-radius:18px;
     display:block;
     margin:0 auto;
     box-shadow:0 10px 28px rgba(0,0,0,.12);
-    touch-action:none; /* กัน browser แย่ง gesture */
+    touch-action:none;
   }
 
   .hint{
     margin:10px 0 0;
     font-size:14px;
-    color:rgba(0,0,0,.75);
+    color:rgba(0,0,0,.78);
     line-height:1.35;
   }
   .hint strong{color:#000}
 
-  /* Big premium buttons */
   .btnrow{
     display:flex;
     gap:12px;
@@ -106,6 +98,8 @@
     flex-wrap:wrap;
     margin-top:12px;
   }
+
+  /* BIG PREMIUM BUTTON */
   button{
     background:var(--realme-yellow);
     color:var(--ink);
@@ -120,29 +114,27 @@
     cursor:pointer;
     transition:all .18s ease;
   }
+  button.secondary{ background:#fff; }
   button:active{
     transform:scale(.96);
     box-shadow:0 6px 16px rgba(0,0,0,.28);
   }
-  button.secondary{
-    background:#fff;
-  }
 
   @media (max-width:768px){
-    .brand{font-size:46px}
     button{
       width:85%;
       font-size:26px;
       padding:22px 0;
       border-radius:35px;
     }
-    .pill{min-width:0; flex:1}
+    .pill{min-width:0}
+    .logo{font-size:48px}
   }
 
-  /* Hold indicator (Slide) */
+  /* Hold indicator */
   .holdbar{
     margin:10px auto 0;
-    width:min(96vw, 920px);
+    width:min(96vw, 940px);
     height:10px;
     border-radius:999px;
     background:rgba(255,255,255,.65);
@@ -188,44 +180,34 @@
   .modal .scoreline{
     margin-top:10px;
     font-size:18px;
-    font-weight:800;
-  }
-  .modal .scoreline span{
-    color:#000;
-  }
-  .modal .tip{
-    margin-top:8px;
-    font-size:16px;
-    color:rgba(0,0,0,.75);
+    font-weight:900;
   }
 </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="brand">realme</div>
-    <p class="sub">Jump • Double Jump • Slide • Collect Stars</p>
+  <div class="logo">realme</div>
+  <div class="subtitle">Jump • Double Jump • Slide • Collect Stars</div>
 
-    <div class="card">
-      <div class="toprow">
-        <div class="pill"><small>Score</small><b id="score">0</b></div>
-        <div class="pill"><small>Goal</small><b id="goal">25</b></div>
-        <div class="pill"><small>High</small><b id="high">0</b></div>
-      </div>
+  <div class="panel">
+    <div class="hud">
+      <div class="pill"><small>Score</small><b id="score">0</b></div>
+      <div class="pill"><small>Goal</small><b id="goal">25</b></div>
+      <div class="pill"><small>High</small><b id="high">0</b></div>
+    </div>
 
-      <canvas id="game" width="920" height="360"></canvas>
-      <div class="holdbar" aria-hidden="true"><div class="holdfill" id="holdfill"></div></div>
+    <canvas id="game" width="920" height="360"></canvas>
+    <div class="holdbar"><div class="holdfill" id="holdfill"></div></div>
 
-      <div class="hint">
-        <div><strong>มือถือ:</strong> แตะที่ไหนก็ได้ = กระโดด • กดค้าง = Slide</div>
-        <div><strong>คอม:</strong> Space/Click = Jump (2x) • Hold S/↓ = Slide</div>
-        <div>เก็บดาว = <strong>+2</strong> คะแนน</div>
-      </div>
+    <div class="hint">
+      <div><strong>มือถือ:</strong> แตะตรงไหนก็ได้ = Jump (2x) • กดค้าง = Slide</div>
+      <div><strong>คอม:</strong> Space/Click = Jump (2x) • Hold S/↓ = Slide</div>
+      <div>เก็บดาว = <strong>+2</strong> คะแนน</div>
+    </div>
 
-      <div class="btnrow">
-        <button id="startBtn">Start</button>
-        <button class="secondary" id="howBtn">How to play</button>
-      </div>
+    <div class="btnrow">
+      <button id="startBtn">Start</button>
+      <button class="secondary" id="howBtn">How to play</button>
     </div>
   </div>
 
@@ -234,7 +216,6 @@
       <h1 id="ovTitle">GAME OVER</h1>
       <p id="ovDesc">โดนสิ่งกีดขวางแล้ว 😭</p>
       <div class="scoreline">คะแนน: <span id="ovScore">0</span> / <span id="ovGoal">25</span></div>
-      <div class="tip" id="ovTip">ทริค: ใช้ Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม</div>
       <div class="btnrow" style="margin-top:14px">
         <button id="playAgainBtn">Play Again</button>
         <button class="secondary" id="closeBtn">Close</button>
@@ -244,8 +225,11 @@
 
 <script>
 /* =========================
-   realme Jump Challenge v2
-   Mobile: tap anywhere = jump, hold = slide
+   realme Jump Challenge (stable)
+   - Fix: double jump on mobile
+   - Fix: no duplicate events (touch vs pointer)
+   - Tap anywhere = jump, hold = slide
+   - Stars +2, survive +1
    ========================= */
 
 const canvas = document.getElementById("game");
@@ -264,11 +248,12 @@ const ovTitle = document.getElementById("ovTitle");
 const ovDesc  = document.getElementById("ovDesc");
 const ovScore = document.getElementById("ovScore");
 const ovGoal  = document.getElementById("ovGoal");
-const ovTip   = document.getElementById("ovTip");
 const playAgainBtn = document.getElementById("playAgainBtn");
 const closeBtn = document.getElementById("closeBtn");
 
-// --- Game config
+const IS_TOUCH = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
+
+// config
 const GOAL = 25;
 goalEl.textContent = GOAL;
 ovGoal.textContent = GOAL;
@@ -277,18 +262,12 @@ let highScore = Number(localStorage.getItem("realme_highscore") || 0);
 highEl.textContent = highScore;
 
 let running = false;
-let gameOver = false;
 let lastTime = 0;
-let spawnT = 0;
-let starSpawnT = 0;
-
 let score = 0;
 
-// World
-const groundY = 285; // baseline
-const speedBase = 420; // px/s
+const groundY = 285;
+const speedBase = 420;
 
-// Player
 const player = {
   x: 120,
   y: groundY - 46,
@@ -301,16 +280,16 @@ const player = {
   normalH: 46
 };
 
-const gravity = 2200; // px/s^2
+const gravity = 2200;
 const jumpVel = -820;
 
-// Obstacles & Stars
 let obstacles = [];
 let stars = [];
+let spawnT = 0;
+let starSpawnT = 0;
 
 function resetGame(){
   running = false;
-  gameOver = false;
   score = 0;
   scoreEl.textContent = score;
 
@@ -325,20 +304,21 @@ function resetGame(){
 
   spawnT = 0;
   starSpawnT = 0;
+  surviveAcc = 0;
+  holdFillEl.style.width = "0%";
 }
 
 function startGame(){
   resetGame();
   running = true;
   overlay.style.display = "none";
+  lastTime = 0;
   requestAnimationFrame(loop);
 }
 
 function endGame(type){
   running = false;
-  gameOver = true;
 
-  // high score update
   if(score > highScore){
     highScore = score;
     localStorage.setItem("realme_highscore", String(highScore));
@@ -348,15 +328,21 @@ function endGame(type){
   if(type === "win"){
     ovTitle.textContent = "YOU WIN!";
     ovDesc.textContent = "ยินดีด้วย! คุณเป็น realme FAN 🎉";
-    ovTip.textContent = "แชร์คะแนนให้เพื่อนท้าทายกันต่อได้เลย";
   }else{
     ovTitle.textContent = "GAME OVER";
     ovDesc.textContent = "โดนสิ่งกีดขวางแล้ว 😭";
-    ovTip.textContent = "ทริค: กดค้างเพื่อ Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม";
   }
 
   ovScore.textContent = score;
   overlay.style.display = "flex";
+}
+
+function addScore(n){
+  score += n;
+  scoreEl.textContent = score;
+  if(score >= GOAL){
+    endGame("win");
+  }
 }
 
 function jump(){
@@ -370,116 +356,38 @@ function jump(){
 function setSlide(on){
   if(!running) return;
   player.sliding = on;
-  if(on){
-    player.h = player.slideH;
-  }else{
-    player.h = player.normalH;
-  }
-  // keep feet on ground if grounded
+  player.h = on ? player.slideH : player.normalH;
   if(player.y + player.h > groundY){
     player.y = groundY - player.h;
   }
 }
 
-// --- Spawn
+// spawn
 function spawnObstacle(){
-  // 2 types: low block (jump) or tall pole (slide) or mid
   const r = Math.random();
   let type = "mid";
   if(r < 0.38) type = "low";
   else if(r < 0.75) type = "tall";
 
-  let w = 26;
-  let h = 46;
-
-  if(type === "low"){ w=34; h=36; }
-  if(type === "tall"){ w=22; h=84; }
+  let w = 26, h = 46;
+  if(type === "low"){ w = 34; h = 36; }
+  if(type === "tall"){ w = 22; h = 84; }
 
   obstacles.push({
     x: canvas.width + 30,
     y: groundY - h,
-    w, h,
-    type
+    w, h, type
   });
 }
 
 function spawnStar(){
-  // star floats above ground: choose a lane height
-  const lanes = [
-    groundY - 120,
-    groundY - 165,
-    groundY - 90
-  ];
-  const y = lanes[Math.floor(Math.random()*lanes.length)];
-  stars.push({
-    x: canvas.width + 30,
-    y,
-    r: 12,
-    taken:false
-  });
+  const lanes = [groundY - 120, groundY - 165, groundY - 90];
+  const y = lanes[(Math.random()*lanes.length)|0];
+  stars.push({ x: canvas.width + 30, y, r: 12, taken:false });
 }
 
 function aabb(ax,ay,aw,ah, bx,by,bw,bh){
   return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
-}
-
-// --- Render helpers
-function drawBackground(){
-  // subtle runway
-  ctx.fillStyle = "#fff";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  // sky tint
-  const g = ctx.createLinearGradient(0,0,0,canvas.height);
-  g.addColorStop(0,"#fff7c9");
-  g.addColorStop(1,"#ffffff");
-  ctx.fillStyle = g;
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  // road line
-  ctx.fillStyle = "rgba(0,0,0,.85)";
-  ctx.fillRect(0, groundY, canvas.width, 4);
-
-  // dashed lane
-  ctx.strokeStyle = "rgba(0,0,0,.18)";
-  ctx.lineWidth = 3;
-  ctx.setLineDash([14,12]);
-  ctx.beginPath();
-  ctx.moveTo(0, groundY-26);
-  ctx.lineTo(canvas.width, groundY-26);
-  ctx.stroke();
-  ctx.setLineDash([]);
-}
-
-function drawPlayer(){
-  // body (phone)
-  const px = player.x;
-  const py = player.y;
-  const w = player.w;
-  const h = player.h;
-
-  // shadow
-  ctx.fillStyle = "rgba(0,0,0,.12)";
-  ctx.beginPath();
-  ctx.ellipse(px + w/2, groundY + 12, w/2.2, 10, 0, 0, Math.PI*2);
-  ctx.fill();
-
-  // phone body
-  ctx.fillStyle = "#111";
-  roundRect(px, py, w, h, 14);
-  ctx.fill();
-
-  // screen
-  ctx.fillStyle = "#0f2b3a";
-  roundRect(px+6, py+6, w-12, Math.max(10,h-16), 10);
-  ctx.fill();
-
-  // realme text
-  ctx.fillStyle = "#FFD400";
-  ctx.font = "bold 12px Arial";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("realme", px + w/2, py + h/2);
 }
 
 function roundRect(x,y,w,h,r){
@@ -493,25 +401,54 @@ function roundRect(x,y,w,h,r){
   ctx.closePath();
 }
 
+function drawBackground(){
+  const g = ctx.createLinearGradient(0,0,0,canvas.height);
+  g.addColorStop(0,"#fff7c9");
+  g.addColorStop(1,"#ffffff");
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle = "rgba(0,0,0,.85)";
+  ctx.fillRect(0, groundY, canvas.width, 4);
+
+  ctx.strokeStyle = "rgba(0,0,0,.18)";
+  ctx.lineWidth = 3;
+  ctx.setLineDash([14,12]);
+  ctx.beginPath();
+  ctx.moveTo(0, groundY-26);
+  ctx.lineTo(canvas.width, groundY-26);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawPlayer(){
+  const px = player.x, py = player.y, w = player.w, h = player.h;
+
+  ctx.fillStyle = "rgba(0,0,0,.12)";
+  ctx.beginPath();
+  ctx.ellipse(px + w/2, groundY + 12, w/2.2, 10, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle = "#111";
+  roundRect(px, py, w, h, 14); ctx.fill();
+
+  ctx.fillStyle = "#0f2b3a";
+  roundRect(px+6, py+6, w-12, Math.max(10,h-16), 10); ctx.fill();
+
+  ctx.fillStyle = "#FFD400";
+  ctx.font = "bold 12px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("realme", px + w/2, py + h/2);
+}
+
 function drawObstacle(o){
-  // different looks
-  if(o.type === "tall"){
-    ctx.fillStyle = "rgba(0,0,0,.92)";
-    roundRect(o.x,o.y,o.w,o.h,10);
-    ctx.fill();
-  }else if(o.type === "low"){
-    ctx.fillStyle = "rgba(0,0,0,.88)";
-    roundRect(o.x,o.y,o.w,o.h,12);
-    ctx.fill();
-  }else{
-    ctx.fillStyle = "rgba(0,0,0,.9)";
-    roundRect(o.x,o.y,o.w,o.h,12);
-    ctx.fill();
-  }
+  ctx.fillStyle = "rgba(0,0,0,.92)";
+  roundRect(o.x, o.y, o.w, o.h, 12);
+  ctx.fill();
 }
 
 function drawStar(s){
-  // star glow
   ctx.save();
   ctx.translate(s.x, s.y);
   ctx.fillStyle = "rgba(255,212,0,.35)";
@@ -519,114 +456,18 @@ function drawStar(s){
   ctx.arc(0,0,20,0,Math.PI*2);
   ctx.fill();
 
-  // star shape
   ctx.fillStyle = "#FFD400";
   ctx.beginPath();
-  const spikes = 5;
-  const outerR = 12;
-  const innerR = 5.5;
+  const spikes=5, outerR=12, innerR=5.5;
   let rot = Math.PI/2 * 3;
   let step = Math.PI / spikes;
   ctx.moveTo(0, -outerR);
   for(let i=0;i<spikes;i++){
-    ctx.lineTo(Math.cos(rot)*outerR, Math.sin(rot)*outerR);
-    rot += step;
-    ctx.lineTo(Math.cos(rot)*innerR, Math.sin(rot)*innerR);
-    rot += step;
+    ctx.lineTo(Math.cos(rot)*outerR, Math.sin(rot)*outerR); rot += step;
+    ctx.lineTo(Math.cos(rot)*innerR, Math.sin(rot)*innerR); rot += step;
   }
-  ctx.closePath();
-  ctx.fill();
+  ctx.closePath(); ctx.fill();
   ctx.restore();
-}
-
-function addScore(n){
-  score += n;
-  scoreEl.textContent = score;
-  if(score >= GOAL){
-    endGame("win");
-  }
-}
-
-// --- Loop
-function loop(t){
-  if(!running) return;
-
-  const dt = Math.min(0.033, (t - lastTime)/1000 || 0);
-  lastTime = t;
-
-  // Difficulty: speed increases with score
-  const speed = speedBase + Math.min(260, score * 12);
-
-  // Spawn timing
-  spawnT += dt;
-  starSpawnT += dt;
-
-  // obstacles every ~1.3-1.8 sec (randomized)
-  if(spawnT > (1.15 + Math.random()*0.6)){
-    spawnObstacle();
-    spawnT = 0;
-  }
-
-  // stars every ~1.2-2.2 sec (randomized)
-  if(starSpawnT > (1.0 + Math.random()*1.2)){
-    spawnStar();
-    starSpawnT = 0;
-  }
-
-  // Physics
-  player.vy += gravity * dt;
-  player.y += player.vy * dt;
-
-  // Ground collision
-  if(player.y + player.h >= groundY){
-    player.y = groundY - player.h;
-    player.vy = 0;
-    player.jumps = 0;
-  }
-
-  // Move obstacles
-  for(const o of obstacles){
-    o.x -= speed * dt;
-  }
-  obstacles = obstacles.filter(o => o.x + o.w > -30);
-
-  // Move stars
-  for(const s of stars){
-    s.x -= (speed * 0.95) * dt;
-  }
-  stars = stars.filter(s => s.x > -40 && !s.taken);
-
-  // Collisions
-  // Obstacles collide
-  for(const o of obstacles){
-    if(aabb(player.x, player.y, player.w, player.h, o.x, o.y, o.w, o.h)){
-      endGame("lose");
-      return;
-    }
-  }
-
-  // Star collect
-  for(const s of stars){
-    // treat star as box for ease
-    const bx = s.x - s.r, by = s.y - s.r, bw = s.r*2, bh = s.r*2;
-    if(aabb(player.x, player.y, player.w, player.h, bx, by, bw, bh)){
-      s.taken = true;
-      addScore(2);
-    }
-  }
-
-  // Score by surviving (slow tick)
-  // +1 every ~0.7 sec
-  tickSurvive(dt);
-
-  // Render
-  drawBackground();
-
-  for(const s of stars) drawStar(s);
-  for(const o of obstacles) drawObstacle(o);
-  drawPlayer();
-
-  requestAnimationFrame(loop);
 }
 
 let surviveAcc = 0;
@@ -638,50 +479,108 @@ function tickSurvive(dt){
   }
 }
 
+function loop(t){
+  if(!running) return;
+
+  const dt = Math.min(0.033, (t - lastTime)/1000 || 0);
+  lastTime = t;
+
+  const speed = speedBase + Math.min(260, score * 12);
+
+  spawnT += dt;
+  starSpawnT += dt;
+
+  if(spawnT > (1.15 + Math.random()*0.6)){
+    spawnObstacle();
+    spawnT = 0;
+  }
+  if(starSpawnT > (1.0 + Math.random()*1.2)){
+    spawnStar();
+    starSpawnT = 0;
+  }
+
+  // physics
+  player.vy += gravity * dt;
+  player.y += player.vy * dt;
+
+  if(player.y + player.h >= groundY){
+    player.y = groundY - player.h;
+    player.vy = 0;
+    player.jumps = 0; // ✅ reset jumps only when grounded
+  }
+
+  // move
+  for(const o of obstacles) o.x -= speed * dt;
+  obstacles = obstacles.filter(o => o.x + o.w > -30);
+
+  for(const s of stars) s.x -= (speed * 0.95) * dt;
+  stars = stars.filter(s => s.x > -40 && !s.taken);
+
+  // collisions
+  for(const o of obstacles){
+    if(aabb(player.x, player.y, player.w, player.h, o.x, o.y, o.w, o.h)){
+      endGame("lose"); return;
+    }
+  }
+  for(const s of stars){
+    const bx = s.x - s.r, by = s.y - s.r, bw = s.r*2, bh = s.r*2;
+    if(aabb(player.x, player.y, player.w, player.h, bx, by, bw, bh)){
+      s.taken = true;
+      addScore(2);
+    }
+  }
+
+  tickSurvive(dt);
+
+  // render
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  drawBackground();
+  for(const s of stars) drawStar(s);
+  for(const o of obstacles) drawObstacle(o);
+  drawPlayer();
+
+  requestAnimationFrame(loop);
+}
+
 /* =========================
-   Input (Mobile Full Screen)
-   - Tap anywhere = Jump
-   - Hold = Slide
+   INPUT (Stable)
+   Mobile: touch only (no pointer duplicate)
+   Desktop: pointer + keyboard
    ========================= */
 let holdTimer = null;
 let holding = false;
 let holdStart = 0;
-let holdProgressRAF = null;
-
-const HOLD_MS = 150;
+let holdRAF = null;
+const HOLD_MS = 160;
 
 function startHoldUI(){
   holdStart = performance.now();
-  cancelAnimationFrame(holdProgressRAF);
+  cancelAnimationFrame(holdRAF);
   const step = () => {
     const p = Math.min(1, (performance.now() - holdStart) / HOLD_MS);
-    holdFillEl.style.width = (p * 100).toFixed(0) + "%";
-    if(p < 1) holdProgressRAF = requestAnimationFrame(step);
+    holdFillEl.style.width = (p*100).toFixed(0) + "%";
+    if(p < 1) holdRAF = requestAnimationFrame(step);
   };
-  holdProgressRAF = requestAnimationFrame(step);
+  holdRAF = requestAnimationFrame(step);
 }
-
 function resetHoldUI(){
-  cancelAnimationFrame(holdProgressRAF);
+  cancelAnimationFrame(holdRAF);
   holdFillEl.style.width = "0%";
 }
 
 function onTouchStart(e){
-  // กัน scroll/zoom + กันการเลือกข้อความ
   e.preventDefault();
-
-  // ไม่ให้แตะปุ่มแล้วเกมกระโดด
   if(e.target.closest("button")) return;
 
   if(!running){
-    // แตะหน้าจอเพื่อเริ่มได้
     startGame();
+    // ให้เริ่มแล้วกระโดดได้ทันที 1 ครั้ง
+    setTimeout(() => jump(), 0);
     return;
   }
 
   holding = false;
   startHoldUI();
-
   clearTimeout(holdTimer);
   holdTimer = setTimeout(() => {
     holding = true;
@@ -710,14 +609,15 @@ document.addEventListener("touchstart", onTouchStart, {passive:false});
 document.addEventListener("touchend", onTouchEnd, {passive:false});
 document.addEventListener("touchcancel", onTouchEnd, {passive:false});
 
-// Desktop
+// Desktop pointer (disable on touch devices to avoid duplicate)
 document.addEventListener("pointerdown", (e) => {
+  if(IS_TOUCH) return;
   if(e.target.closest("button")) return;
   if(!running){ startGame(); return; }
   jump();
 });
 
-// Keyboard (PC)
+// Keyboard
 document.addEventListener("keydown", (e) => {
   if(e.code === "Space"){
     e.preventDefault();
@@ -736,21 +636,18 @@ document.addEventListener("keyup", (e) => {
   }
 });
 
-/* =========================
-   UI Buttons
-   ========================= */
+/* UI buttons */
 startBtn.addEventListener("click", () => startGame());
 playAgainBtn.addEventListener("click", () => startGame());
 closeBtn.addEventListener("click", () => overlay.style.display = "none");
 howBtn.addEventListener("click", () => {
   overlay.style.display = "flex";
   ovTitle.textContent = "HOW TO PLAY";
-  ovDesc.textContent = "แตะ = Jump • แตะ 2 ครั้งได้ (Double Jump) • กดค้าง = Slide";
+  ovDesc.textContent = "แตะ = Jump • แตะซ้ำได้ (Double Jump) • กดค้าง = Slide • เก็บดาว +2";
   ovScore.textContent = score;
-  ovTip.textContent = "เก็บดาว +2 คะแนน • ทำคะแนนถึง Goal เพื่อเป็น realme FAN 🎉";
 });
 
-// init
+// init screen
 resetGame();
 drawBackground();
 drawPlayer();
