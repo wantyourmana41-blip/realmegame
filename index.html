@@ -9,17 +9,13 @@
 :root{
   --rm-yellow:#FFD400;
   --rm-ink:#111;
-  --rm-muted: rgba(17,17,17,.64);
   --stroke: rgba(17,17,17,.10);
   --shadow: 0 18px 55px rgba(0,0,0,.22);
-  --radius-xl: 26px;
-  --radius-lg: 18px;
-  --radius-md: 14px;
-  --radius-pill: 999px;
+  --r-xl: 26px;
+  --r-lg: 18px;
+  --pill: 999px;
 }
-
 *{box-sizing:border-box}
-
 html,body{
   height:100%;
   margin:0;
@@ -27,12 +23,9 @@ html,body{
     radial-gradient(1200px 700px at 50% -10%, rgba(255,255,255,.28), rgba(255,255,255,0) 55%),
     linear-gradient(180deg, #FFD400 0%, #FFC800 100%);
   color:var(--rm-ink);
-
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
                Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
   text-align:center;
   overflow:hidden;
   overscroll-behavior:none;
@@ -40,34 +33,19 @@ html,body{
   user-select:none;
   -webkit-user-select:none;
 }
-
-.header{
-  margin:22px 0 10px;
-}
-.brand{
-  font-size:56px;
-  font-weight:1000;
-  letter-spacing:-0.9px;
-  line-height:1;
-}
-.tagline{
-  margin:6px 0 0;
-  font-size:13px;
-  font-weight:800;
-  color:rgba(17,17,17,.55);
-}
-
+.header{margin:22px 0 10px}
+.brand{font-size:56px;font-weight:1000;letter-spacing:-0.9px;line-height:1}
+.tagline{margin:6px 0 0;font-size:13px;font-weight:900;color:rgba(17,17,17,.55)}
 .panel{
   width:min(980px, 94vw);
   margin:0 auto;
   background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
   border:1px solid var(--stroke);
-  border-radius: var(--radius-xl);
+  border-radius: var(--r-xl);
   box-shadow: var(--shadow);
   padding:16px 16px 14px;
   backdrop-filter: blur(6px);
 }
-
 .hud{
   display:grid;
   grid-template-columns: repeat(3, minmax(120px, 1fr)) minmax(280px, 1.35fr);
@@ -75,81 +53,45 @@ html,body{
   align-items:stretch;
   margin-bottom:12px;
 }
-
-.pill{
+.pillCard{
   background: rgba(255,255,255,.92);
   border:1px solid var(--stroke);
-  border-radius: var(--radius-lg);
+  border-radius: var(--r-lg);
   padding:12px 14px;
   box-shadow: 0 8px 18px rgba(0,0,0,.08);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:6px;
   text-align:left;
 }
-
-.pill small{
+.pillCard small{
+  display:block;
   font-size:12px;
-  font-weight:900;
+  font-weight:1000;
   letter-spacing:.35px;
   text-transform:uppercase;
   color:rgba(17,17,17,.55);
+  margin-bottom:6px;
 }
-
-.pill b{
-  font-size:24px;
-  font-weight:1000;
-  letter-spacing:-.4px;
-}
-
+.pillCard b{font-size:24px;font-weight:1000;letter-spacing:-.4px}
 .rewardBox{
   background: rgba(255,255,255,.92);
   border:1px solid var(--stroke);
-  border-radius: var(--radius-lg);
+  border-radius: var(--r-lg);
   padding:12px 14px;
   box-shadow: 0 8px 18px rgba(0,0,0,.08);
   text-align:left;
 }
-
-.rewardTitle{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin:0 0 8px;
-}
-.rewardTitle b{
-  font-size:12px;
-  font-weight:1000;
-  letter-spacing:.35px;
-  text-transform:uppercase;
-  color:rgba(17,17,17,.65);
-}
+.rewardTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px}
+.rewardTitle b{font-size:12px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase;color:rgba(17,17,17,.65)}
 .badge{
-  padding:7px 10px;
-  border-radius: var(--radius-pill);
-  background: rgba(17,17,17,.08);
+  padding:7px 10px;border-radius:var(--pill);
+  background:rgba(17,17,17,.08);
   border:1px solid rgba(17,17,17,.10);
-  font-size:12px;
-  font-weight:1000;
-  color:rgba(17,17,17,.70);
+  font-size:12px;font-weight:1000;color:rgba(17,17,17,.70);
   white-space:nowrap;
 }
-.badge.win{
-  background:#111;
-  color:#fff;
-  border-color: rgba(0,0,0,0);
-}
-.rewardList{
-  margin:0;
-  padding-left:16px;
-  font-size:13px;
-  line-height:1.45;
-  color:rgba(17,17,17,.78);
-}
-.rewardList li{ margin:6px 0; }
-.rewardList li.done{ color:#000; font-weight:1000; }
+.badge.win{background:#111;color:#fff;border-color:transparent}
+.rewardList{margin:0;padding-left:16px;font-size:13px;line-height:1.45;color:rgba(17,17,17,.78)}
+.rewardList li{margin:6px 0}
+.rewardList li.done{color:#000;font-weight:1000}
 
 canvas{
   width:min(940px, 94vw);
@@ -157,252 +99,106 @@ canvas{
   display:block;
   margin:0 auto;
   background: linear-gradient(180deg, #FFF7D0 0%, #FFFFFF 65%);
-  border-radius: var(--radius-lg);
+  border-radius: var(--r-lg);
   border:1px solid rgba(17,17,17,.10);
   box-shadow: 0 10px 24px rgba(0,0,0,.10);
   touch-action:none;
 }
-
 .holdbar{
   margin:10px auto 0;
   width:min(940px, 94vw);
   height:10px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--pill);
   background: rgba(17,17,17,.08);
   overflow:hidden;
 }
-.holdfill{
-  height:100%;
-  width:0%;
-  border-radius: var(--radius-pill);
-  background: rgba(0,0,0,.90);
-  transition: width .08s linear;
-}
+.holdfill{height:100%;width:0%;border-radius:var(--pill);background:rgba(0,0,0,.90);transition:width .08s linear}
+.hint{margin:12px auto 0;width:min(940px,94vw);font-size:13px;line-height:1.45;color:rgba(17,17,17,.68)}
+.hint strong{color:rgba(0,0,0,.92)}
 
-.hint{
-  margin:12px auto 0;
-  width:min(940px, 94vw);
-  font-size:13px;
-  line-height:1.45;
-  color: rgba(17,17,17,.68);
-}
-.hint strong{ color: rgba(0,0,0,.92); }
-
-.controls{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:14px;
-}
-
-.inputWrap{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  justify-content:center;
-  flex-wrap:wrap;
-  width:100%;
-}
-
+.controls{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
 .input{
   width:min(420px, 86vw);
   background:#fff;
   border:1px solid rgba(17,17,17,.14);
-  border-radius: 999px;
+  border-radius: var(--pill);
   padding:14px 16px;
   font-size:16px;
-  font-weight:800;
+  font-weight:900;
   outline:none;
   box-shadow: 0 10px 22px rgba(0,0,0,.08);
 }
-.input::placeholder{ color:rgba(17,17,17,.45); font-weight:800; }
-
-.btnrow{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-  width:100%;
-}
-
+.input::placeholder{color:rgba(17,17,17,.45);font-weight:900}
+.btnrow{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;width:100%}
 button{
-  border:none;
-  cursor:pointer;
-  border-radius: 999px;
-  padding:16px 32px;
-  min-width:200px;
-  min-height:56px;
-  font-size:18px;
-  font-weight:1000;
-  letter-spacing:.2px;
-  background:#111;
-  color:#fff;
-  box-shadow: 0 12px 26px rgba(0,0,0,.20);
-  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  border:none;cursor:pointer;border-radius:var(--pill);
+  padding:16px 32px;min-width:200px;min-height:56px;
+  font-size:18px;font-weight:1000;letter-spacing:.2px;
+  background:#111;color:#fff;
+  box-shadow:0 12px 26px rgba(0,0,0,.20);
+  transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
 }
-button.secondary{
-  background:#fff;
-  color:#111;
-  border:1px solid rgba(17,17,17,.14);
-  box-shadow: 0 10px 22px rgba(0,0,0,.10);
-}
-button:active{
-  transform: translateY(1px) scale(.98);
-  box-shadow: 0 8px 18px rgba(0,0,0,.22);
-}
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-  transform:none;
-}
+button.secondary{background:#fff;color:#111;border:1px solid rgba(17,17,17,.14);box-shadow:0 10px 22px rgba(0,0,0,.10)}
+button:active{transform:translateY(1px) scale(.98);box-shadow:0 8px 18px rgba(0,0,0,.22)}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
 
-/* Leaderboard */
 .leaderboard{
   width:min(980px, 94vw);
   margin:14px auto 0;
   background: rgba(255,255,255,.78);
   border:1px solid rgba(17,17,17,.10);
-  border-radius: var(--radius-xl);
+  border-radius: var(--r-xl);
   box-shadow: 0 14px 40px rgba(0,0,0,.14);
   padding:14px 14px 12px;
   text-align:left;
 }
-
-.lbHead{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:10px;
-}
-.lbHead .title{
-  font-weight:1000;
-  letter-spacing:.25px;
-}
-.lbHead .sub{
-  color:rgba(17,17,17,.55);
-  font-size:12px;
-  font-weight:900;
-}
-
-table{
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0;
-  overflow:hidden;
-  border-radius: 16px;
-  border:1px solid rgba(17,17,17,.10);
-  background:#fff;
-}
+.lbHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.lbHead .title{font-weight:1000;letter-spacing:.25px}
+.lbHead .sub{color:rgba(17,17,17,.55);font-size:12px;font-weight:900}
+table{width:100%;border-collapse:separate;border-spacing:0;border-radius:16px;border:1px solid rgba(17,17,17,.10);background:#fff;overflow:hidden}
 thead th{
-  text-align:left;
-  font-size:12px;
-  letter-spacing:.35px;
-  text-transform:uppercase;
-  padding:10px 12px;
-  color:rgba(17,17,17,.60);
+  text-align:left;font-size:12px;letter-spacing:.35px;text-transform:uppercase;
+  padding:10px 12px;color:rgba(17,17,17,.60);
   background: rgba(17,17,17,.04);
   border-bottom:1px solid rgba(17,17,17,.08);
 }
-tbody td{
-  padding:10px 12px;
-  border-bottom:1px solid rgba(17,17,17,.08);
-  font-weight:800;
-}
-tbody tr:last-child td{ border-bottom:none; }
-.rank{
-  width:70px;
-  color:rgba(17,17,17,.60);
-  font-weight:1000;
-}
-.scoreCell{ font-weight:1000; }
-.dateCell{
-  color:rgba(17,17,17,.55);
-  font-weight:900;
-  font-size:12px;
-  white-space:nowrap;
-}
+tbody td{padding:10px 12px;border-bottom:1px solid rgba(17,17,17,.08);font-weight:900}
+tbody tr:last-child td{border-bottom:none}
+.rank{width:70px;color:rgba(17,17,17,.60);font-weight:1000}
+.dateCell{color:rgba(17,17,17,.55);font-weight:900;font-size:12px;white-space:nowrap}
 
 #overlay{
-  position:fixed;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background: rgba(0,0,0,.55);
-  padding:16px;
+  position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.55);padding:16px;
 }
 .modal{
-  width:min(560px, 92vw);
-  background: rgba(255,255,255,.96);
-  border-radius: var(--radius-xl);
+  width:min(560px,92vw);
+  background:rgba(255,255,255,.96);
+  border-radius: var(--r-xl);
   padding:18px 18px 16px;
-  box-shadow: 0 18px 60px rgba(0,0,0,.35);
+  box-shadow:0 18px 60px rgba(0,0,0,.35);
   border:1px solid rgba(17,17,17,.10);
   text-align:left;
 }
-.modal h1{
-  margin:4px 0 8px;
-  font-size:34px;
-  font-weight:1000;
-  letter-spacing:-.6px;
-  text-align:center;
-}
-.modal p{
-  margin:0;
-  text-align:center;
-  color: rgba(17,17,17,.70);
-  font-weight:800;
-  line-height:1.4;
-}
-.modal .scoreline{
-  margin-top:12px;
-  text-align:center;
-  font-weight:1000;
-  font-size:18px;
-}
+.modal h1{margin:4px 0 8px;font-size:34px;font-weight:1000;letter-spacing:-.6px;text-align:center}
+.modal p{margin:0;text-align:center;color:rgba(17,17,17,.70);font-weight:900;line-height:1.4}
+.modal .scoreline{margin-top:12px;text-align:center;font-weight:1000;font-size:18px}
 .prizeCard{
-  margin-top:12px;
-  background: rgba(255,249,217,.9);
+  margin-top:12px;background:rgba(255,249,217,.9);
   border:1px solid rgba(17,17,17,.10);
-  border-radius: var(--radius-lg);
-  padding:12px;
-  text-align:center;
+  border-radius: var(--r-lg);
+  padding:12px;text-align:center;
 }
-.prizeCard .label{
-  font-size:12px;
-  font-weight:1000;
-  letter-spacing:.35px;
-  text-transform:uppercase;
-  color: rgba(17,17,17,.60);
-}
-.prizeCard .prize{
-  margin-top:6px;
-  font-size:20px;
-  font-weight:1000;
-}
-.prizeCard .note{
-  margin-top:6px;
-  font-size:12px;
-  color: rgba(17,17,17,.60);
-  line-height:1.4;
-}
+.prizeCard .label{font-size:12px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase;color:rgba(17,17,17,.60)}
+.prizeCard .prize{margin-top:6px;font-size:20px;font-weight:1000}
+.prizeCard .note{margin-top:6px;font-size:12px;color:rgba(17,17,17,.60);line-height:1.4}
 
-@media (max-width: 860px){
-  .hud{ grid-template-columns: repeat(2, 1fr); }
-  .rewardBox{ grid-column: 1 / -1; }
-  .brand{ font-size:46px; }
-  button{ width:86%; font-size:20px; padding:18px 0; min-width:0; }
-  .input{ width:86%; }
-  .leaderboard{ margin-top:12px; }
-}
-
-@media (max-height: 780px){
-  /* กันพื้นที่แนวตั้งแน่นเกินบนจอเตี้ย */
-  .header{ margin:16px 0 8px; }
-  .panel{ padding:14px; }
+@media (max-width:860px){
+  .hud{grid-template-columns:repeat(2,1fr)}
+  .rewardBox{grid-column:1/-1}
+  .brand{font-size:46px}
+  button{width:86%;font-size:20px;padding:18px 0;min-width:0}
+  .input{width:86%}
 }
 </style>
 </head>
@@ -415,9 +211,9 @@ tbody tr:last-child td{ border-bottom:none; }
 
   <div class="panel">
     <div class="hud">
-      <div class="pill"><small>Score</small><b id="score">0</b></div>
-      <div class="pill"><small>Goal</small><b id="goal">400</b></div>
-      <div class="pill"><small>High</small><b id="high">0</b></div>
+      <div class="pillCard"><small>Score</small><b id="score">0</b></div>
+      <div class="pillCard"><small>Goal</small><b id="goal">400</b></div>
+      <div class="pillCard"><small>High</small><b id="high">0</b></div>
 
       <div class="rewardBox">
         <div class="rewardTitle">
@@ -442,9 +238,7 @@ tbody tr:last-child td{ border-bottom:none; }
     </div>
 
     <div class="controls">
-      <div class="inputWrap">
-        <input id="playerName" class="input" maxlength="20" placeholder="กรอกชื่อก่อนเล่น (เช่น First)" autocomplete="off" />
-      </div>
+      <input id="playerName" class="input" maxlength="20" placeholder="กรอกชื่อก่อนเล่น (เช่น First)" autocomplete="off" />
       <div class="btnrow">
         <button id="startBtn" disabled>Start</button>
         <button id="howBtn" class="secondary" type="button">How to play</button>
@@ -454,8 +248,8 @@ tbody tr:last-child td{ border-bottom:none; }
 
   <div class="leaderboard">
     <div class="lbHead">
-      <div class="title">🏆 Top Score</div>
-      <div class="sub">แสดง Top 10 (เก็บในเครื่องนี้)</div>
+      <div class="title">🏆 Top Score (Online)</div>
+      <div class="sub" id="lbStatus">กำลังโหลด...</div>
     </div>
 
     <table>
@@ -468,9 +262,7 @@ tbody tr:last-child td{ border-bottom:none; }
           <th style="width:170px;">Date</th>
         </tr>
       </thead>
-      <tbody id="lbBody">
-        <!-- rows injected -->
-      </tbody>
+      <tbody id="lbBody"></tbody>
     </table>
   </div>
 
@@ -494,14 +286,13 @@ tbody tr:last-child td{ border-bottom:none; }
   </div>
 
 <script>
-/* =========================
-   realme Game Day
-   - Name required before play
-   - Local Top Score (Top 10)
-   - Goal 400 + Rewards
-   - Mobile: tap anywhere jump (2x), hold = slide
-   ========================= */
+/** =========================
+ *  IMPORTANT: ใส่ URL Web App ที่ Deploy ไว้
+ *  เช่น https://script.google.com/macros/s/XXXX/exec
+ * ========================= */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAyUPknNkK9pQWPvX6Eckd2GothRzvRX9gwdCFdCdlx4zwmj4o38KXOx3ArTSy-8gL/exec";
 
+/* ===== DOM ===== */
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -521,7 +312,6 @@ const ovScore = document.getElementById("ovScore");
 const ovGoal  = document.getElementById("ovGoal");
 const ovPrize = document.getElementById("ovPrize");
 const ovPrizeNote = document.getElementById("ovPrizeNote");
-
 const playAgainBtn = document.getElementById("playAgainBtn");
 const closeBtn = document.getElementById("closeBtn");
 
@@ -531,98 +321,14 @@ const r200 = document.getElementById("r200");
 const r400 = document.getElementById("r400");
 
 const lbBody = document.getElementById("lbBody");
+const lbStatus = document.getElementById("lbStatus");
 
 const IS_TOUCH = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
 
-// config
+/* ===== Config ===== */
 const GOAL = 400;
 goalEl.textContent = GOAL;
 ovGoal.textContent = GOAL;
-
-function getRewardByScore(s){
-  if(s >= 400) return "realme speaker";
-  if(s >= 200) return "realme bag";
-  if(s >= 100) return "Voucher discount 333";
-  return "—";
-}
-
-function fmtDate(ts){
-  const d = new Date(ts);
-  const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2,'0');
-  const day = String(d.getDate()).padStart(2,'0');
-  const hh = String(d.getHours()).padStart(2,'0');
-  const mm = String(d.getMinutes()).padStart(2,'0');
-  return `${y}-${m}-${day} ${hh}:${mm}`;
-}
-
-/* ===== Leaderboard (localStorage) ===== */
-const LB_KEY = "realme_gameday_top10";
-
-function loadLB(){
-  try{
-    const raw = localStorage.getItem(LB_KEY);
-    const arr = raw ? JSON.parse(raw) : [];
-    return Array.isArray(arr) ? arr : [];
-  }catch(_){
-    return [];
-  }
-}
-
-function saveLB(arr){
-  localStorage.setItem(LB_KEY, JSON.stringify(arr));
-}
-
-function renderLB(){
-  const arr = loadLB();
-  lbBody.innerHTML = "";
-
-  if(arr.length === 0){
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="rank">—</td>
-      <td colspan="4" style="color:rgba(17,17,17,.55); font-weight:900;">
-        ยังไม่มีคะแนนในเครื่องนี้ — เล่นเพื่อขึ้นอันดับ!
-      </td>`;
-    lbBody.appendChild(tr);
-    return;
-  }
-
-  arr.slice(0,10).forEach((row, idx) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="rank">#${idx+1}</td>
-      <td>${escapeHtml(row.name)}</td>
-      <td class="scoreCell">${row.score}</td>
-      <td>${escapeHtml(row.reward)}</td>
-      <td class="dateCell">${escapeHtml(row.date)}</td>
-    `;
-    lbBody.appendChild(tr);
-  });
-}
-
-function updateLB(name, score){
-  const reward = getRewardByScore(score);
-  const arr = loadLB();
-
-  arr.push({
-    name: name,
-    score: score,
-    reward: reward,
-    date: fmtDate(Date.now())
-  });
-
-  // sort by score desc, then newest
-  arr.sort((a,b) => (b.score - a.score) || (b.date.localeCompare(a.date)));
-
-  const top10 = arr.slice(0,10);
-  saveLB(top10);
-  renderLB();
-
-  // update "High" from leaderboard top
-  const best = top10[0]?.score || 0;
-  highEl.textContent = best;
-}
 
 function escapeHtml(s){
   return String(s)
@@ -633,86 +339,148 @@ function escapeHtml(s){
     .replaceAll("'","&#039;");
 }
 
-/* ===== Game state ===== */
-let running = false;
-let lastTime = 0;
-let score = 0;
+function getRewardByScore(s){
+  if(s >= 400) return "realme speaker";
+  if(s >= 200) return "realme bag";
+  if(s >= 100) return "Voucher discount 333";
+  return "—";
+}
 
-const groundY = 285;
-const speedBase = 420;
+/* ===== Online Leaderboard (JSONP) ===== */
+function loadTopOnline(){
+  return new Promise((resolve, reject) => {
+    if(!SCRIPT_URL || SCRIPT_URL.includes("PUT_YOUR_WEBAPP_URL_HERE")){
+      reject(new Error("SCRIPT_URL not set"));
+      return;
+    }
 
-const player = {
-  x: 120,
-  y: groundY - 46,
-  w: 46,
-  h: 46,
-  vy: 0,
-  jumps: 0,
-  sliding:false,
-  slideH: 26,
-  normalH: 46
-};
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const script = document.createElement("script");
 
-const gravity = 2200;
-const jumpVel = -820;
+    window[cb] = (data) => {
+      try{
+        delete window[cb];
+        script.remove();
+      }catch(_){}
+      resolve(data);
+    };
 
-let obstacles = [];
-let stars = [];
-let spawnT = 0;
-let starSpawnT = 0;
-let surviveAcc = 0;
+    script.onerror = () => {
+      try{ delete window[cb]; script.remove(); }catch(_){}
+      reject(new Error("load failed"));
+    };
+
+    script.src = `${SCRIPT_URL}?action=top&limit=10&callback=${cb}&_=${Date.now()}`;
+    document.body.appendChild(script);
+  });
+}
+
+function renderLB(top){
+  lbBody.innerHTML = "";
+  if(!top || top.length === 0){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="rank">—</td><td colspan="4" style="color:rgba(17,17,17,.55); font-weight:900;">ยังไม่มีคะแนน — เล่นเพื่อขึ้นอันดับ!</td>`;
+    lbBody.appendChild(tr);
+    return;
+  }
+
+  top.forEach((row, idx) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="rank">#${idx+1}</td>
+      <td>${escapeHtml(row.name)}</td>
+      <td>${row.score}</td>
+      <td>${escapeHtml(row.reward)}</td>
+      <td class="dateCell">${escapeHtml(String(row.ts || row.date || ""))}</td>
+    `;
+    lbBody.appendChild(tr);
+  });
+
+  highEl.textContent = top[0]?.score ?? 0;
+}
+
+async function refreshLB(){
+  try{
+    lbStatus.textContent = "กำลังโหลด...";
+    const data = await loadTopOnline();
+    if(!data || !data.ok){
+      lbStatus.textContent = "โหลดไม่ได้ (ลองใหม่)";
+      renderLB([]);
+      return;
+    }
+    lbStatus.textContent = "อัปเดตล่าสุด: " + new Date().toLocaleTimeString();
+    renderLB(data.top || []);
+  }catch(e){
+    lbStatus.textContent = "โหลดไม่ได้ (เช็ก URL / Deploy)";
+    renderLB([]);
+  }
+}
+
+/* ===== Submit Score (no-cors) ===== */
+function submitScoreOnline(name, score){
+  if(!SCRIPT_URL || SCRIPT_URL.includes("PUT_YOUR_WEBAPP_URL_HERE")) return;
+
+  const payload = {
+    name,
+    score,
+    ua: navigator.userAgent
+  };
+
+  // no-cors: ส่งได้แน่นอน แม้อ่าน response ไม่ได้
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  }).catch(()=>{});
+}
+
+/* ===== Game ===== */
+let running=false, lastTime=0, score=0;
+const groundY=285;
+const speedBase=420;
+
+const player={ x:120, y:groundY-46, w:46, h:46, vy:0, jumps:0, sliding:false, slideH:26, normalH:46 };
+const gravity=2200, jumpVel=-820;
+
+let obstacles=[], stars=[], spawnT=0, starSpawnT=0, surviveAcc=0;
 
 function updateRewardUI(){
   r100.classList.toggle("done", score >= 100);
   r200.classList.toggle("done", score >= 200);
   r400.classList.toggle("done", score >= 400);
 
-  if(score >= 400){
-    rewardBadge.textContent = "Unlocked: speaker";
-    rewardBadge.classList.add("win");
-  }else if(score >= 200){
-    rewardBadge.textContent = "Unlocked: bag";
-    rewardBadge.classList.add("win");
-  }else if(score >= 100){
-    rewardBadge.textContent = "Unlocked: voucher";
-    rewardBadge.classList.add("win");
-  }else{
-    rewardBadge.textContent = "Keep playing";
-    rewardBadge.classList.remove("win");
-  }
+  if(score >= 400){ rewardBadge.textContent="Unlocked: speaker"; rewardBadge.classList.add("win"); }
+  else if(score >= 200){ rewardBadge.textContent="Unlocked: bag"; rewardBadge.classList.add("win"); }
+  else if(score >= 100){ rewardBadge.textContent="Unlocked: voucher"; rewardBadge.classList.add("win"); }
+  else { rewardBadge.textContent="Keep playing"; rewardBadge.classList.remove("win"); }
 }
 
 function resetGame(){
-  running = false;
-  score = 0;
-  scoreEl.textContent = score;
+  running=false;
+  score=0;
+  scoreEl.textContent=score;
 
-  player.y = groundY - player.normalH;
-  player.h = player.normalH;
-  player.vy = 0;
-  player.jumps = 0;
-  player.sliding = false;
+  player.y=groundY-player.normalH;
+  player.h=player.normalH;
+  player.vy=0;
+  player.jumps=0;
+  player.sliding=false;
 
-  obstacles = [];
-  stars = [];
-  spawnT = 0;
-  starSpawnT = 0;
-  surviveAcc = 0;
-
-  holdFillEl.style.width = "0%";
+  obstacles=[]; stars=[];
+  spawnT=0; starSpawnT=0; surviveAcc=0;
+  holdFillEl.style.width="0%";
   updateRewardUI();
 }
 
 function startGame(){
   const name = playerNameInput.value.trim();
-  if(!name){
-    playerNameInput.focus();
-    return;
-  }
+  if(!name){ playerNameInput.focus(); return; }
+
   resetGame();
-  running = true;
-  overlay.style.display = "none";
-  lastTime = 0;
+  running=true;
+  overlay.style.display="none";
+  lastTime=0;
   requestAnimationFrame(loop);
 }
 
@@ -720,25 +488,27 @@ function endGame(type){
   const name = playerNameInput.value.trim() || "Player";
   const reward = getRewardByScore(score);
 
-  // Save leaderboard on any end (lose or win)
-  updateLB(name, score);
+  // ส่งคะแนนขึ้นออนไลน์
+  submitScoreOnline(name, score);
+  // refresh leaderboard หลังส่ง (หน่วงนิด)
+  setTimeout(refreshLB, 1200);
 
-  running = false;
+  running=false;
 
   ovPrize.textContent = reward;
   ovScore.textContent = score;
 
-  if(type === "win"){
-    ovTitle.textContent = "YOU WIN!";
-    ovDesc.textContent = "คะแนนครบ 400 แล้ว 🎉";
-    ovPrizeNote.textContent = "*ระบบแสดงรางวัลตามคะแนน (ปรับเงื่อนไขได้ตามแคมเปญจริง)";
+  if(type==="win"){
+    ovTitle.textContent="YOU WIN!";
+    ovDesc.textContent="คะแนนครบ 400 แล้ว 🎉";
+    ovPrizeNote.textContent="*ระบบแสดงรางวัลตามคะแนน (ปรับเงื่อนไขได้ตามแคมเปญจริง)";
   }else{
-    ovTitle.textContent = "GAME OVER";
-    ovDesc.textContent = "โดนสิ่งกีดขวางแล้ว 😭";
-    ovPrizeNote.textContent = "*ทริค: กดค้าง Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม";
+    ovTitle.textContent="GAME OVER";
+    ovDesc.textContent="โดนสิ่งกีดขวางแล้ว 😭";
+    ovPrizeNote.textContent="*ทริค: กดค้าง Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม";
   }
 
-  overlay.style.display = "flex";
+  overlay.style.display="flex";
 }
 
 function addScore(n){
@@ -746,9 +516,7 @@ function addScore(n){
   if(score > GOAL) score = GOAL;
   scoreEl.textContent = score;
   updateRewardUI();
-  if(score >= GOAL){
-    endGame("win");
-  }
+  if(score >= GOAL) endGame("win");
 }
 
 function jump(){
@@ -758,41 +526,35 @@ function jump(){
     player.jumps++;
   }
 }
-
 function setSlide(on){
   if(!running) return;
   player.sliding = on;
   player.h = on ? player.slideH : player.normalH;
-  if(player.y + player.h > groundY){
-    player.y = groundY - player.h;
-  }
+  if(player.y + player.h > groundY) player.y = groundY - player.h;
 }
 
 function spawnObstacle(){
-  const r = Math.random();
-  let type = "mid";
-  if(r < 0.38) type = "low";
-  else if(r < 0.75) type = "tall";
+  const r=Math.random();
+  let type="mid";
+  if(r<0.38) type="low";
+  else if(r<0.75) type="tall";
 
-  let w = 26, h = 46;
-  if(type === "low"){ w = 34; h = 36; }
-  if(type === "tall"){ w = 22; h = 84; }
+  let w=26,h=46;
+  if(type==="low"){w=34;h=36;}
+  if(type==="tall"){w=22;h=84;}
 
-  obstacles.push({ x: canvas.width + 30, y: groundY - h, w, h, type });
+  obstacles.push({ x: canvas.width+30, y: groundY-h, w, h, type });
 }
-
 function spawnStar(){
-  const lanes = [groundY - 120, groundY - 165, groundY - 90];
-  const y = lanes[(Math.random()*lanes.length)|0];
-  stars.push({ x: canvas.width + 30, y, r: 12, taken:false });
+  const lanes=[groundY-120, groundY-165, groundY-90];
+  const y=lanes[(Math.random()*lanes.length)|0];
+  stars.push({ x: canvas.width+30, y, r:12, taken:false });
 }
-
-function aabb(ax,ay,aw,ah, bx,by,bw,bh){
-  return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+function aabb(ax,ay,aw,ah,bx,by,bw,bh){
+  return ax<bx+bw && ax+aw>bx && ay<by+bh && ay+ah>by;
 }
-
 function roundRect(x,y,w,h,r){
-  r = Math.min(r, w/2, h/2);
+  r=Math.min(r,w/2,h/2);
   ctx.beginPath();
   ctx.moveTo(x+r,y);
   ctx.arcTo(x+w,y,x+w,y+h,r);
@@ -801,17 +563,13 @@ function roundRect(x,y,w,h,r){
   ctx.arcTo(x,y,x+w,y,r);
   ctx.closePath();
 }
-
 function drawBackground(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  // road baseline
-  ctx.fillStyle = "rgba(0,0,0,.86)";
+  ctx.fillStyle="rgba(0,0,0,.86)";
   ctx.fillRect(0, groundY, canvas.width, 4);
 
-  // dashed line
-  ctx.strokeStyle = "rgba(0,0,0,.16)";
-  ctx.lineWidth = 3;
+  ctx.strokeStyle="rgba(0,0,0,.16)";
+  ctx.lineWidth=3;
   ctx.setLineDash([14,12]);
   ctx.beginPath();
   ctx.moveTo(0, groundY-26);
@@ -819,61 +577,50 @@ function drawBackground(){
   ctx.stroke();
   ctx.setLineDash([]);
 }
-
 function drawPlayer(){
-  const px = player.x, py = player.y, w = player.w, h = player.h;
+  const px=player.x, py=player.y, w=player.w, h=player.h;
 
-  // shadow
-  ctx.fillStyle = "rgba(0,0,0,.12)";
+  ctx.fillStyle="rgba(0,0,0,.12)";
   ctx.beginPath();
-  ctx.ellipse(px + w/2, groundY + 12, w/2.2, 10, 0, 0, Math.PI*2);
+  ctx.ellipse(px+w/2, groundY+12, w/2.2, 10, 0, 0, Math.PI*2);
   ctx.fill();
 
-  // body
-  ctx.fillStyle = "#111";
-  roundRect(px, py, w, h, 14); ctx.fill();
+  ctx.fillStyle="#111";
+  roundRect(px,py,w,h,14); ctx.fill();
 
-  // screen
-  ctx.fillStyle = "#0f2b3a";
-  roundRect(px+6, py+6, w-12, Math.max(10,h-16), 10); ctx.fill();
+  ctx.fillStyle="#0f2b3a";
+  roundRect(px+6,py+6,w-12,Math.max(10,h-16),10); ctx.fill();
 
-  // realme text
-  ctx.fillStyle = "#FFD400";
-  ctx.font = "bold 12px Arial";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("realme", px + w/2, py + h/2);
+  ctx.fillStyle="#FFD400";
+  ctx.font="bold 12px Arial";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText("realme", px+w/2, py+h/2);
 }
-
 function drawObstacle(o){
-  ctx.fillStyle = "rgba(0,0,0,.92)";
-  roundRect(o.x, o.y, o.w, o.h, 12);
-  ctx.fill();
+  ctx.fillStyle="rgba(0,0,0,.92)";
+  roundRect(o.x,o.y,o.w,o.h,12); ctx.fill();
 }
-
 function drawStar(s){
   ctx.save();
-  ctx.translate(s.x, s.y);
+  ctx.translate(s.x,s.y);
 
-  ctx.fillStyle = "rgba(255,212,0,.35)";
-  ctx.beginPath();
-  ctx.arc(0,0,20,0,Math.PI*2);
-  ctx.fill();
+  ctx.fillStyle="rgba(255,212,0,.35)";
+  ctx.beginPath(); ctx.arc(0,0,20,0,Math.PI*2); ctx.fill();
 
-  ctx.fillStyle = "#FFD400";
+  ctx.fillStyle="#FFD400";
   ctx.beginPath();
   const spikes=5, outerR=12, innerR=5.5;
-  let rot = Math.PI/2 * 3;
-  let step = Math.PI / spikes;
-  ctx.moveTo(0, -outerR);
+  let rot=Math.PI/2*3, step=Math.PI/spikes;
+  ctx.moveTo(0,-outerR);
   for(let i=0;i<spikes;i++){
-    ctx.lineTo(Math.cos(rot)*outerR, Math.sin(rot)*outerR); rot += step;
-    ctx.lineTo(Math.cos(rot)*innerR, Math.sin(rot)*innerR); rot += step;
+    ctx.lineTo(Math.cos(rot)*outerR, Math.sin(rot)*outerR); rot+=step;
+    ctx.lineTo(Math.cos(rot)*innerR, Math.sin(rot)*innerR); rot+=step;
   }
   ctx.closePath(); ctx.fill();
+
   ctx.restore();
 }
-
 function tickSurvive(dt){
   surviveAcc += dt;
   if(surviveAcc >= 0.7){
@@ -881,30 +628,22 @@ function tickSurvive(dt){
     addScore(1);
   }
 }
-
 function loop(t){
   if(!running) return;
 
-  const dt = Math.min(0.033, (t - lastTime)/1000 || 0);
-  lastTime = t;
+  const dt=Math.min(0.033, (t-lastTime)/1000 || 0);
+  lastTime=t;
 
-  const speed = speedBase + Math.min(340, score * 0.9);
+  const speed = speedBase + Math.min(340, score*0.9);
 
   spawnT += dt;
   starSpawnT += dt;
 
-  if(spawnT > (1.05 + Math.random()*0.65)){
-    spawnObstacle();
-    spawnT = 0;
-  }
-  if(starSpawnT > (0.95 + Math.random()*1.25)){
-    spawnStar();
-    starSpawnT = 0;
-  }
+  if(spawnT > (1.05 + Math.random()*0.65)){ spawnObstacle(); spawnT=0; }
+  if(starSpawnT > (0.95 + Math.random()*1.25)){ spawnStar(); starSpawnT=0; }
 
-  // physics
-  player.vy += gravity * dt;
-  player.y += player.vy * dt;
+  player.vy += gravity*dt;
+  player.y += player.vy*dt;
 
   if(player.y + player.h >= groundY){
     player.y = groundY - player.h;
@@ -912,22 +651,21 @@ function loop(t){
     player.jumps = 0;
   }
 
-  for(const o of obstacles) o.x -= speed * dt;
+  for(const o of obstacles) o.x -= speed*dt;
   obstacles = obstacles.filter(o => o.x + o.w > -30);
 
-  for(const s of stars) s.x -= (speed * 0.95) * dt;
+  for(const s of stars) s.x -= (speed*0.95)*dt;
   stars = stars.filter(s => s.x > -40 && !s.taken);
 
   for(const o of obstacles){
-    if(aabb(player.x, player.y, player.w, player.h, o.x, o.y, o.w, o.h)){
+    if(aabb(player.x,player.y,player.w,player.h,o.x,o.y,o.w,o.h)){
       endGame("lose"); return;
     }
   }
-
   for(const s of stars){
-    const bx = s.x - s.r, by = s.y - s.r, bw = s.r*2, bh = s.r*2;
-    if(aabb(player.x, player.y, player.w, player.h, bx, by, bw, bh)){
-      s.taken = true;
+    const bx=s.x-s.r, by=s.y-s.r, bw=s.r*2, bh=s.r*2;
+    if(aabb(player.x,player.y,player.w,player.h,bx,by,bw,bh)){
+      s.taken=true;
       addScore(2);
     }
   }
@@ -942,26 +680,23 @@ function loop(t){
   requestAnimationFrame(loop);
 }
 
-/* ===== Input (stable) ===== */
-let holdTimer = null;
-let holding = false;
-let holdStart = 0;
-let holdRAF = null;
-const HOLD_MS = 160;
+/* ===== Input (Mobile tap anywhere) ===== */
+let holdTimer=null, holding=false, holdStart=0, holdRAF=null;
+const HOLD_MS=160;
 
 function startHoldUI(){
-  holdStart = performance.now();
+  holdStart=performance.now();
   cancelAnimationFrame(holdRAF);
-  const step = () => {
-    const p = Math.min(1, (performance.now() - holdStart) / HOLD_MS);
-    holdFillEl.style.width = (p*100).toFixed(0) + "%";
-    if(p < 1) holdRAF = requestAnimationFrame(step);
+  const step=()=>{
+    const p=Math.min(1, (performance.now()-holdStart)/HOLD_MS);
+    holdFillEl.style.width=(p*100).toFixed(0)+"%";
+    if(p<1) holdRAF=requestAnimationFrame(step);
   };
-  holdRAF = requestAnimationFrame(step);
+  holdRAF=requestAnimationFrame(step);
 }
 function resetHoldUI(){
   cancelAnimationFrame(holdRAF);
-  holdFillEl.style.width = "0%";
+  holdFillEl.style.width="0%";
 }
 
 function onTouchStart(e){
@@ -970,90 +705,85 @@ function onTouchStart(e){
 
   if(!running){
     startGame();
-    // เริ่มแล้วกระโดด 1 ครั้งทันที
-    setTimeout(() => jump(), 0);
+    setTimeout(()=>jump(),0);
     return;
   }
 
-  holding = false;
+  holding=false;
   startHoldUI();
   clearTimeout(holdTimer);
-  holdTimer = setTimeout(() => {
-    holding = true;
+  holdTimer=setTimeout(()=>{
+    holding=true;
     setSlide(true);
   }, HOLD_MS);
 }
-
 function onTouchEnd(e){
   e.preventDefault();
   if(e.target.closest("button") || e.target.closest("input")) return;
 
   clearTimeout(holdTimer);
   resetHoldUI();
-
   if(!running) return;
 
-  if(holding){
-    setSlide(false);
-  }else{
-    jump();
-  }
-  holding = false;
+  if(holding) setSlide(false);
+  else jump();
+
+  holding=false;
 }
 
 document.addEventListener("touchstart", onTouchStart, {passive:false});
 document.addEventListener("touchend", onTouchEnd, {passive:false});
 document.addEventListener("touchcancel", onTouchEnd, {passive:false});
 
-document.addEventListener("pointerdown", (e) => {
+document.addEventListener("pointerdown", (e)=>{
   if(IS_TOUCH) return;
   if(e.target.closest("button") || e.target.closest("input")) return;
   if(!running){ startGame(); return; }
   jump();
 });
 
-document.addEventListener("keydown", (e) => {
-  if(e.code === "Space"){
+document.addEventListener("keydown", (e)=>{
+  if(e.code==="Space"){
     e.preventDefault();
     if(!running){ startGame(); return; }
     jump();
   }
-  if(e.code === "KeyS" || e.code === "ArrowDown"){
+  if(e.code==="KeyS" || e.code==="ArrowDown"){
     e.preventDefault();
     if(running) setSlide(true);
   }
 });
-document.addEventListener("keyup", (e) => {
-  if(e.code === "KeyS" || e.code === "ArrowDown"){
+document.addEventListener("keyup", (e)=>{
+  if(e.code==="KeyS" || e.code==="ArrowDown"){
     e.preventDefault();
     if(running) setSlide(false);
   }
 });
 
-/* ===== UI ===== */
-startBtn.addEventListener("click", () => startGame());
-playAgainBtn.addEventListener("click", () => startGame());
-closeBtn.addEventListener("click", () => overlay.style.display = "none");
+/* UI */
+startBtn.addEventListener("click", startGame);
+playAgainBtn.addEventListener("click", startGame);
+closeBtn.addEventListener("click", ()=> overlay.style.display="none");
 
-howBtn.addEventListener("click", () => {
-  overlay.style.display = "flex";
-  ovTitle.textContent = "HOW TO PLAY";
-  ovDesc.textContent = "แตะ = Jump (2x) • กดค้าง = Slide • เก็บดาว +2 • เป้าหมาย 400";
-  ovScore.textContent = score;
-  ovPrize.textContent = getRewardByScore(score);
-  ovPrizeNote.textContent = "*ถึง 100/200/400 จะได้รางวัลตามเงื่อนไข";
+howBtn.addEventListener("click", ()=>{
+  overlay.style.display="flex";
+  ovTitle.textContent="HOW TO PLAY";
+  ovDesc.textContent="แตะ = Jump (2x) • กดค้าง = Slide • เก็บดาว +2 • เป้าหมาย 400";
+  ovScore.textContent=score;
+  ovPrize.textContent=getRewardByScore(score);
+  ovPrizeNote.textContent="*ถึง 100/200/400 จะได้รางวัลตามเงื่อนไข";
 });
 
-playerNameInput.addEventListener("input", () => {
-  startBtn.disabled = playerNameInput.value.trim().length === 0;
+playerNameInput.addEventListener("input", ()=>{
+  startBtn.disabled = playerNameInput.value.trim().length===0;
 });
 
-// Init
-renderLB();
-highEl.textContent = (loadLB()[0]?.score || 0);
+/* init */
 resetGame();
 drawBackground();
 drawPlayer();
+refreshLB();
+setInterval(refreshLB, 15000);
 </script>
 </body>
 </html>
