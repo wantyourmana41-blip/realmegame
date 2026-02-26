@@ -4,110 +4,46 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>realme Jump Challenge</title>
-<style>
-  :root{
-    --realme-yellow:#FFD400;
-    --ink:#111;
-    --card:#ffffff;
-    --shadow: rgba(0,0,0,.15);
-  }
-  body{
-    margin:0;
-    background:var(--realme-yellow);
-    font-family: Arial, sans-serif;
-    text-align:center;
-    overflow:hidden;
-  }
-  .logo{
-    font-size:56px;
-    font-weight:900;
-    color:var(--ink);
-    margin:18px 0 6px;
-    letter-spacing:.5px;
-  }
-  .sub{
-    font-size:14px;
-    color:rgba(0,0,0,.75);
-    margin-bottom:10px;
-  }
-  canvas{
-    background:var(--card);
-    border-radius:18px;
-    box-shadow: 0 12px 30px var(--shadow);
-    margin:12px auto 0;
-    display:block;
-    max-width: calc(100vw - 24px);
-    height:auto;
-    touch-action: manipulation;
-  }
-  #hud{
-    width:min(800px, calc(100vw - 24px));
-    margin:10px auto 0;
-    display:flex;
-    gap:10px;
-    justify-content:space-between;
-    align-items:center;
-    color:var(--ink);
-    font-weight:700;
-    font-size:14px;
-  }
-  .pill{
-    background:rgba(255,255,255,.7);
-    border:1px solid rgba(0,0,0,.08);
-    padding:8px 10px;
-    border-radius:999px;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 6px 14px rgba(0,0,0,.08);
-  }
+/* ===== BIG PREMIUM BUTTON ===== */
 
-  #overlay{
-    position:fixed;
-    inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:rgba(0,0,0,.62);
-    color:white;
-    flex-direction:column;
-    gap:14px;
-    padding:22px;
-    text-align:center;
-  }
-  #overlay.hidden{ display:none; }
+button{
+  background:#FFD400;
+  color:#111;
+  border:none;
+  border-radius:28px;
 
-  .panel{
-    width:min(520px, 92vw);
-    background:rgba(255,255,255,.10);
-    border:1px solid rgba(255,255,255,.18);
-    border-radius:18px;
-    padding:18px 16px;
-    box-shadow: 0 16px 40px rgba(0,0,0,.25);
-  }
-  .title{
-    font-size:34px;
-    font-weight:900;
-    line-height:1.1;
-  }
-  .desc{
-    margin-top:10px;
-    font-size:16px;
-    color:rgba(255,255,255,.92);
-    line-height:1.4;
-  }
+  font-size:22px;
+  font-weight:700;
+
+  padding:18px 45px;
+  min-width:180px;
+  min-height:65px;
+
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+  cursor:pointer;
+  transition:all .2s ease;
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+button:active{
+  transform:scale(0.96);
+  box-shadow:0 5px 15px rgba(0,0,0,.3);
+}
+
+
+/* ===== MOBILE VERSION ใหญ่พิเศษ ===== */
+
+@media (max-width:768px){
   button{
-    margin-top:12px;
-    padding:12px 18px;
-    font-size:16px;
-    font-weight:800;
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
-    background:#FFD400;
-    color:#111;
-    box-shadow: 0 10px 20px rgba(0,0,0,.2);
+    width:85%;
+    font-size:26px;
+    padding:22px 0;
+    border-radius:35px;
   }
-  button:active{ transform: translateY(1px); }
-</style>
+}
 </head>
 <body>
 
@@ -559,3 +495,4 @@ loop();
 
 </body>
 </html>
+
