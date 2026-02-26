@@ -3,37 +3,33 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>realme Jump Challenge</title>
+<title>realme Game Day</title>
 
 <style>
 :root{
   --rm-yellow:#FFD400;
-  --rm-ink:#111111;
+  --rm-ink:#111;
   --rm-muted: rgba(17,17,17,.64);
-
-  --surface:#FFFFFF;
-  --surface-2:#FFF9D9;
-
   --stroke: rgba(17,17,17,.10);
   --shadow: 0 18px 55px rgba(0,0,0,.22);
-
   --radius-xl: 26px;
   --radius-lg: 18px;
   --radius-md: 14px;
   --radius-pill: 999px;
 }
 
-*{ box-sizing:border-box; }
+*{box-sizing:border-box}
 
 html,body{
   height:100%;
   margin:0;
-  background:var(--rm-yellow);
+  background:
+    radial-gradient(1200px 700px at 50% -10%, rgba(255,255,255,.28), rgba(255,255,255,0) 55%),
+    linear-gradient(180deg, #FFD400 0%, #FFC800 100%);
   color:var(--rm-ink);
 
-  /* Professional system font stack */
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
-  text-rendering: geometricPrecision;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+               Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -45,22 +41,22 @@ html,body{
   -webkit-user-select:none;
 }
 
-.logo{
-  margin:22px 0 2px;
+.header{
+  margin:22px 0 10px;
+}
+.brand{
   font-size:56px;
-  font-weight:900;
-  letter-spacing:-0.8px;
+  font-weight:1000;
+  letter-spacing:-0.9px;
   line-height:1;
 }
-
-.subtitle{
-  margin:0 0 16px;
-  font-size:14px;
-  font-weight:700;
+.tagline{
+  margin:6px 0 0;
+  font-size:13px;
+  font-weight:800;
   color:rgba(17,17,17,.55);
 }
 
-/* Main card */
 .panel{
   width:min(980px, 94vw);
   margin:0 auto;
@@ -69,9 +65,9 @@ html,body{
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow);
   padding:16px 16px 14px;
+  backdrop-filter: blur(6px);
 }
 
-/* HUD layout: clean grid */
 .hud{
   display:grid;
   grid-template-columns: repeat(3, minmax(120px, 1fr)) minmax(280px, 1.35fr);
@@ -80,7 +76,6 @@ html,body{
   margin-bottom:12px;
 }
 
-/* Pills */
 .pill{
   background: rgba(255,255,255,.92);
   border:1px solid var(--stroke);
@@ -96,19 +91,18 @@ html,body{
 
 .pill small{
   font-size:12px;
-  font-weight:800;
-  letter-spacing:.3px;
-  color:rgba(17,17,17,.55);
+  font-weight:900;
+  letter-spacing:.35px;
   text-transform:uppercase;
+  color:rgba(17,17,17,.55);
 }
 
 .pill b{
-  font-size:20px;
-  font-weight:900;
-  letter-spacing:-.2px;
+  font-size:24px;
+  font-weight:1000;
+  letter-spacing:-.4px;
 }
 
-/* Rewards box */
 .rewardBox{
   background: rgba(255,255,255,.92);
   border:1px solid var(--stroke);
@@ -125,61 +119,50 @@ html,body{
   gap:10px;
   margin:0 0 8px;
 }
-
 .rewardTitle b{
   font-size:12px;
-  font-weight:900;
+  font-weight:1000;
   letter-spacing:.35px;
   text-transform:uppercase;
   color:rgba(17,17,17,.65);
 }
-
 .badge{
   padding:7px 10px;
   border-radius: var(--radius-pill);
-  background: rgba(17,17,17,.06);
+  background: rgba(17,17,17,.08);
   border:1px solid rgba(17,17,17,.10);
   font-size:12px;
-  font-weight:900;
+  font-weight:1000;
   color:rgba(17,17,17,.70);
   white-space:nowrap;
 }
-
 .badge.win{
-  background: rgba(0,0,0,.88);
-  color: #fff;
-  border-color: rgba(0,0,0,.0);
+  background:#111;
+  color:#fff;
+  border-color: rgba(0,0,0,0);
 }
-
 .rewardList{
   margin:0;
-  padding-left:18px;
+  padding-left:16px;
   font-size:13px;
   line-height:1.45;
   color:rgba(17,17,17,.78);
 }
+.rewardList li{ margin:6px 0; }
+.rewardList li.done{ color:#000; font-weight:1000; }
 
-.rewardList li{ margin:4px 0; }
-
-.rewardList li.done{
-  color: rgba(0,0,0,.92);
-  font-weight:900;
-}
-
-/* Canvas */
 canvas{
   width:min(940px, 94vw);
   height:auto;
   display:block;
   margin:0 auto;
-  background:#fff;
+  background: linear-gradient(180deg, #FFF7D0 0%, #FFFFFF 65%);
   border-radius: var(--radius-lg);
   border:1px solid rgba(17,17,17,.10);
   box-shadow: 0 10px 24px rgba(0,0,0,.10);
   touch-action:none;
 }
 
-/* Hold bar */
 .holdbar{
   margin:10px auto 0;
   width:min(940px, 94vw);
@@ -196,7 +179,6 @@ canvas{
   transition: width .08s linear;
 }
 
-/* Hint */
 .hint{
   margin:12px auto 0;
   width:min(940px, 94vw);
@@ -206,13 +188,43 @@ canvas{
 }
 .hint strong{ color: rgba(0,0,0,.92); }
 
-/* Buttons */
+.controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+.inputWrap{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  width:100%;
+}
+
+.input{
+  width:min(420px, 86vw);
+  background:#fff;
+  border:1px solid rgba(17,17,17,.14);
+  border-radius: 999px;
+  padding:14px 16px;
+  font-size:16px;
+  font-weight:800;
+  outline:none;
+  box-shadow: 0 10px 22px rgba(0,0,0,.08);
+}
+.input::placeholder{ color:rgba(17,17,17,.45); font-weight:800; }
+
 .btnrow{
   display:flex;
   justify-content:center;
   gap:12px;
   flex-wrap:wrap;
-  margin-top:14px;
+  width:100%;
 }
 
 button{
@@ -222,30 +234,97 @@ button{
   padding:16px 32px;
   min-width:200px;
   min-height:56px;
-
   font-size:18px;
-  font-weight:900;
+  font-weight:1000;
   letter-spacing:.2px;
-
   background:#111;
   color:#fff;
   box-shadow: 0 12px 26px rgba(0,0,0,.20);
   transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
 }
-
+button.secondary{
+  background:#fff;
+  color:#111;
+  border:1px solid rgba(17,17,17,.14);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+}
 button:active{
   transform: translateY(1px) scale(.98);
   box-shadow: 0 8px 18px rgba(0,0,0,.22);
 }
-
-button.secondary{
-  background: #fff;
-  color: #111;
-  border:1px solid rgba(17,17,17,.14);
-  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
 }
 
-/* Overlay (keep clean) */
+/* Leaderboard */
+.leaderboard{
+  width:min(980px, 94vw);
+  margin:14px auto 0;
+  background: rgba(255,255,255,.78);
+  border:1px solid rgba(17,17,17,.10);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 14px 40px rgba(0,0,0,.14);
+  padding:14px 14px 12px;
+  text-align:left;
+}
+
+.lbHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+.lbHead .title{
+  font-weight:1000;
+  letter-spacing:.25px;
+}
+.lbHead .sub{
+  color:rgba(17,17,17,.55);
+  font-size:12px;
+  font-weight:900;
+}
+
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  border-radius: 16px;
+  border:1px solid rgba(17,17,17,.10);
+  background:#fff;
+}
+thead th{
+  text-align:left;
+  font-size:12px;
+  letter-spacing:.35px;
+  text-transform:uppercase;
+  padding:10px 12px;
+  color:rgba(17,17,17,.60);
+  background: rgba(17,17,17,.04);
+  border-bottom:1px solid rgba(17,17,17,.08);
+}
+tbody td{
+  padding:10px 12px;
+  border-bottom:1px solid rgba(17,17,17,.08);
+  font-weight:800;
+}
+tbody tr:last-child td{ border-bottom:none; }
+.rank{
+  width:70px;
+  color:rgba(17,17,17,.60);
+  font-weight:1000;
+}
+.scoreCell{ font-weight:1000; }
+.dateCell{
+  color:rgba(17,17,17,.55);
+  font-weight:900;
+  font-size:12px;
+  white-space:nowrap;
+}
+
 #overlay{
   position:fixed;
   inset:0;
@@ -255,7 +334,6 @@ button.secondary{
   background: rgba(0,0,0,.55);
   padding:16px;
 }
-
 .modal{
   width:min(560px, 92vw);
   background: rgba(255,255,255,.96);
@@ -265,7 +343,6 @@ button.secondary{
   border:1px solid rgba(17,17,17,.10);
   text-align:left;
 }
-
 .modal h1{
   margin:4px 0 8px;
   font-size:34px;
@@ -273,22 +350,19 @@ button.secondary{
   letter-spacing:-.6px;
   text-align:center;
 }
-
 .modal p{
   margin:0;
   text-align:center;
   color: rgba(17,17,17,.70);
-  font-weight:700;
+  font-weight:800;
   line-height:1.4;
 }
-
 .modal .scoreline{
   margin-top:12px;
   text-align:center;
   font-weight:1000;
   font-size:18px;
 }
-
 .prizeCard{
   margin-top:12px;
   background: rgba(255,249,217,.9);
@@ -297,7 +371,6 @@ button.secondary{
   padding:12px;
   text-align:center;
 }
-
 .prizeCard .label{
   font-size:12px;
   font-weight:1000;
@@ -305,13 +378,11 @@ button.secondary{
   text-transform:uppercase;
   color: rgba(17,17,17,.60);
 }
-
 .prizeCard .prize{
   margin-top:6px;
   font-size:20px;
   font-weight:1000;
 }
-
 .prizeCard .note{
   margin-top:6px;
   font-size:12px;
@@ -319,27 +390,28 @@ button.secondary{
   line-height:1.4;
 }
 
-/* Mobile */
 @media (max-width: 860px){
-  .hud{
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .rewardBox{
-    grid-column: 1 / -1;
-  }
-  button{
-    width:86%;
-    font-size:20px;
-    padding:18px 0;
-  }
-  .logo{ font-size:48px; }
+  .hud{ grid-template-columns: repeat(2, 1fr); }
+  .rewardBox{ grid-column: 1 / -1; }
+  .brand{ font-size:46px; }
+  button{ width:86%; font-size:20px; padding:18px 0; min-width:0; }
+  .input{ width:86%; }
+  .leaderboard{ margin-top:12px; }
+}
+
+@media (max-height: 780px){
+  /* กันพื้นที่แนวตั้งแน่นเกินบนจอเตี้ย */
+  .header{ margin:16px 0 8px; }
+  .panel{ padding:14px; }
 }
 </style>
 </head>
 
 <body>
-  <div class="logo">realme</div>
-  <div class="subtitle">Jump • Double Jump • Slide • Collect Stars</div>
+  <div class="header">
+    <div class="brand">realme Game Day</div>
+    <div class="tagline">Jump • Double Jump • Slide • Collect Stars</div>
+  </div>
 
   <div class="panel">
     <div class="hud">
@@ -352,7 +424,7 @@ button.secondary{
           <b>🎁 Rewards (ตามคะแนน)</b>
           <span class="badge" id="rewardBadge">Keep playing</span>
         </div>
-        <ul class="rewardList" id="rewardList">
+        <ul class="rewardList">
           <li id="r100">≥ 100 : Voucher discount 333</li>
           <li id="r200">≥ 200 : realme bag</li>
           <li id="r400">≥ 400 : realme speaker</li>
@@ -369,10 +441,37 @@ button.secondary{
       <div>เก็บดาว = <strong>+2</strong> คะแนน</div>
     </div>
 
-    <div class="btnrow">
-      <button id="startBtn">Start</button>
-      <button class="secondary" id="howBtn">How to play</button>
+    <div class="controls">
+      <div class="inputWrap">
+        <input id="playerName" class="input" maxlength="20" placeholder="กรอกชื่อก่อนเล่น (เช่น First)" autocomplete="off" />
+      </div>
+      <div class="btnrow">
+        <button id="startBtn" disabled>Start</button>
+        <button id="howBtn" class="secondary" type="button">How to play</button>
+      </div>
     </div>
+  </div>
+
+  <div class="leaderboard">
+    <div class="lbHead">
+      <div class="title">🏆 Top Score</div>
+      <div class="sub">แสดง Top 10 (เก็บในเครื่องนี้)</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th class="rank">Rank</th>
+          <th>Name</th>
+          <th style="width:140px;">Score</th>
+          <th style="width:170px;">Reward</th>
+          <th style="width:170px;">Date</th>
+        </tr>
+      </thead>
+      <tbody id="lbBody">
+        <!-- rows injected -->
+      </tbody>
+    </table>
   </div>
 
   <div id="overlay">
@@ -384,26 +483,23 @@ button.secondary{
       <div class="prizeCard">
         <div class="label">🎁 Your reward</div>
         <div class="prize" id="ovPrize">—</div>
-        <div class="note" id="ovPrizeNote">
-          *รางวัลเป็นเงื่อนไขตัวอย่างสำหรับเกมหน้าเว็บ (ปรับได้ตามแคมเปญ)
-        </div>
+        <div class="note" id="ovPrizeNote">*ทริค: กดค้าง Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม</div>
       </div>
 
       <div class="btnrow" style="margin-top:14px; justify-content:center;">
         <button id="playAgainBtn">Play Again</button>
-        <button class="secondary" id="closeBtn">Close</button>
+        <button id="closeBtn" class="secondary">Close</button>
       </div>
     </div>
   </div>
 
 <script>
 /* =========================
-   realme Jump Challenge (Rewards)
-   Goal = 400
-   Rewards:
-   - >=100 : Voucher discount 333
-   - >=200 : realme bag
-   - >=400 : realme speaker
+   realme Game Day
+   - Name required before play
+   - Local Top Score (Top 10)
+   - Goal 400 + Rewards
+   - Mobile: tap anywhere jump (2x), hold = slide
    ========================= */
 
 const canvas = document.getElementById("game");
@@ -414,6 +510,7 @@ const goalEl  = document.getElementById("goal");
 const highEl  = document.getElementById("high");
 const holdFillEl = document.getElementById("holdfill");
 
+const playerNameInput = document.getElementById("playerName");
 const startBtn = document.getElementById("startBtn");
 const howBtn = document.getElementById("howBtn");
 
@@ -422,33 +519,121 @@ const ovTitle = document.getElementById("ovTitle");
 const ovDesc  = document.getElementById("ovDesc");
 const ovScore = document.getElementById("ovScore");
 const ovGoal  = document.getElementById("ovGoal");
-const playAgainBtn = document.getElementById("playAgainBtn");
-const closeBtn = document.getElementById("closeBtn");
-
 const ovPrize = document.getElementById("ovPrize");
 const ovPrizeNote = document.getElementById("ovPrizeNote");
+
+const playAgainBtn = document.getElementById("playAgainBtn");
+const closeBtn = document.getElementById("closeBtn");
 
 const rewardBadge = document.getElementById("rewardBadge");
 const r100 = document.getElementById("r100");
 const r200 = document.getElementById("r200");
 const r400 = document.getElementById("r400");
 
+const lbBody = document.getElementById("lbBody");
+
 const IS_TOUCH = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
 
-// ===== config =====
+// config
 const GOAL = 400;
 goalEl.textContent = GOAL;
 ovGoal.textContent = GOAL;
 
-const REWARDS = [
-  { score: 100, name: "Voucher discount 333" },
-  { score: 200, name: "realme bag" },
-  { score: 400, name: "realme speaker" },
-];
+function getRewardByScore(s){
+  if(s >= 400) return "realme speaker";
+  if(s >= 200) return "realme bag";
+  if(s >= 100) return "Voucher discount 333";
+  return "—";
+}
 
-let highScore = Number(localStorage.getItem("realme_highscore") || 0);
-highEl.textContent = highScore;
+function fmtDate(ts){
+  const d = new Date(ts);
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mm = String(d.getMinutes()).padStart(2,'0');
+  return `${y}-${m}-${day} ${hh}:${mm}`;
+}
 
+/* ===== Leaderboard (localStorage) ===== */
+const LB_KEY = "realme_gameday_top10";
+
+function loadLB(){
+  try{
+    const raw = localStorage.getItem(LB_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  }catch(_){
+    return [];
+  }
+}
+
+function saveLB(arr){
+  localStorage.setItem(LB_KEY, JSON.stringify(arr));
+}
+
+function renderLB(){
+  const arr = loadLB();
+  lbBody.innerHTML = "";
+
+  if(arr.length === 0){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="rank">—</td>
+      <td colspan="4" style="color:rgba(17,17,17,.55); font-weight:900;">
+        ยังไม่มีคะแนนในเครื่องนี้ — เล่นเพื่อขึ้นอันดับ!
+      </td>`;
+    lbBody.appendChild(tr);
+    return;
+  }
+
+  arr.slice(0,10).forEach((row, idx) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="rank">#${idx+1}</td>
+      <td>${escapeHtml(row.name)}</td>
+      <td class="scoreCell">${row.score}</td>
+      <td>${escapeHtml(row.reward)}</td>
+      <td class="dateCell">${escapeHtml(row.date)}</td>
+    `;
+    lbBody.appendChild(tr);
+  });
+}
+
+function updateLB(name, score){
+  const reward = getRewardByScore(score);
+  const arr = loadLB();
+
+  arr.push({
+    name: name,
+    score: score,
+    reward: reward,
+    date: fmtDate(Date.now())
+  });
+
+  // sort by score desc, then newest
+  arr.sort((a,b) => (b.score - a.score) || (b.date.localeCompare(a.date)));
+
+  const top10 = arr.slice(0,10);
+  saveLB(top10);
+  renderLB();
+
+  // update "High" from leaderboard top
+  const best = top10[0]?.score || 0;
+  highEl.textContent = best;
+}
+
+function escapeHtml(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* ===== Game state ===== */
 let running = false;
 let lastTime = 0;
 let score = 0;
@@ -477,20 +662,10 @@ let spawnT = 0;
 let starSpawnT = 0;
 let surviveAcc = 0;
 
-function getRewardByScore(s){
-  if(s >= 400) return "realme speaker";
-  if(s >= 200) return "realme bag";
-  if(s >= 100) return "Voucher discount 333";
-  return "—";
-}
-
 function updateRewardUI(){
-  // list highlight
   r100.classList.toggle("done", score >= 100);
   r200.classList.toggle("done", score >= 200);
   r400.classList.toggle("done", score >= 400);
-
-  const rewardNow = getRewardByScore(score);
 
   if(score >= 400){
     rewardBadge.textContent = "Unlocked: speaker";
@@ -505,8 +680,6 @@ function updateRewardUI(){
     rewardBadge.textContent = "Keep playing";
     rewardBadge.classList.remove("win");
   }
-
-  return rewardNow;
 }
 
 function resetGame(){
@@ -522,16 +695,20 @@ function resetGame(){
 
   obstacles = [];
   stars = [];
-
   spawnT = 0;
   starSpawnT = 0;
   surviveAcc = 0;
-  holdFillEl.style.width = "0%";
 
+  holdFillEl.style.width = "0%";
   updateRewardUI();
 }
 
 function startGame(){
+  const name = playerNameInput.value.trim();
+  if(!name){
+    playerNameInput.focus();
+    return;
+  }
   resetGame();
   running = true;
   overlay.style.display = "none";
@@ -540,16 +717,16 @@ function startGame(){
 }
 
 function endGame(type){
+  const name = playerNameInput.value.trim() || "Player";
+  const reward = getRewardByScore(score);
+
+  // Save leaderboard on any end (lose or win)
+  updateLB(name, score);
+
   running = false;
 
-  if(score > highScore){
-    highScore = score;
-    localStorage.setItem("realme_highscore", String(highScore));
-    highEl.textContent = highScore;
-  }
-
-  const reward = getRewardByScore(score);
   ovPrize.textContent = reward;
+  ovScore.textContent = score;
 
   if(type === "win"){
     ovTitle.textContent = "YOU WIN!";
@@ -561,13 +738,12 @@ function endGame(type){
     ovPrizeNote.textContent = "*ทริค: กดค้าง Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม";
   }
 
-  ovScore.textContent = score;
   overlay.style.display = "flex";
 }
 
 function addScore(n){
   score += n;
-  if(score > GOAL) score = GOAL; // cap
+  if(score > GOAL) score = GOAL;
   scoreEl.textContent = score;
   updateRewardUI();
   if(score >= GOAL){
@@ -592,7 +768,6 @@ function setSlide(on){
   }
 }
 
-// spawn
 function spawnObstacle(){
   const r = Math.random();
   let type = "mid";
@@ -603,11 +778,7 @@ function spawnObstacle(){
   if(type === "low"){ w = 34; h = 36; }
   if(type === "tall"){ w = 22; h = 84; }
 
-  obstacles.push({
-    x: canvas.width + 30,
-    y: groundY - h,
-    w, h, type
-  });
+  obstacles.push({ x: canvas.width + 30, y: groundY - h, w, h, type });
 }
 
 function spawnStar(){
@@ -632,16 +803,14 @@ function roundRect(x,y,w,h,r){
 }
 
 function drawBackground(){
-  const g = ctx.createLinearGradient(0,0,0,canvas.height);
-  g.addColorStop(0,"#fff7c9");
-  g.addColorStop(1,"#ffffff");
-  ctx.fillStyle = g;
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  ctx.fillStyle = "rgba(0,0,0,.85)";
+  // road baseline
+  ctx.fillStyle = "rgba(0,0,0,.86)";
   ctx.fillRect(0, groundY, canvas.width, 4);
 
-  ctx.strokeStyle = "rgba(0,0,0,.18)";
+  // dashed line
+  ctx.strokeStyle = "rgba(0,0,0,.16)";
   ctx.lineWidth = 3;
   ctx.setLineDash([14,12]);
   ctx.beginPath();
@@ -654,17 +823,21 @@ function drawBackground(){
 function drawPlayer(){
   const px = player.x, py = player.y, w = player.w, h = player.h;
 
+  // shadow
   ctx.fillStyle = "rgba(0,0,0,.12)";
   ctx.beginPath();
   ctx.ellipse(px + w/2, groundY + 12, w/2.2, 10, 0, 0, Math.PI*2);
   ctx.fill();
 
+  // body
   ctx.fillStyle = "#111";
   roundRect(px, py, w, h, 14); ctx.fill();
 
+  // screen
   ctx.fillStyle = "#0f2b3a";
   roundRect(px+6, py+6, w-12, Math.max(10,h-16), 10); ctx.fill();
 
+  // realme text
   ctx.fillStyle = "#FFD400";
   ctx.font = "bold 12px Arial";
   ctx.textAlign = "center";
@@ -715,7 +888,7 @@ function loop(t){
   const dt = Math.min(0.033, (t - lastTime)/1000 || 0);
   lastTime = t;
 
-  const speed = speedBase + Math.min(340, score * 0.9); // speed scale w/ score
+  const speed = speedBase + Math.min(340, score * 0.9);
 
   spawnT += dt;
   starSpawnT += dt;
@@ -736,7 +909,7 @@ function loop(t){
   if(player.y + player.h >= groundY){
     player.y = groundY - player.h;
     player.vy = 0;
-    player.jumps = 0; // reset jumps when grounded
+    player.jumps = 0;
   }
 
   for(const o of obstacles) o.x -= speed * dt;
@@ -761,7 +934,6 @@ function loop(t){
 
   tickSurvive(dt);
 
-  ctx.clearRect(0,0,canvas.width,canvas.height);
   drawBackground();
   for(const s of stars) drawStar(s);
   for(const o of obstacles) drawObstacle(o);
@@ -770,11 +942,7 @@ function loop(t){
   requestAnimationFrame(loop);
 }
 
-/* =========================
-   INPUT (Stable)
-   Mobile: touch only (avoid pointer duplicate)
-   Desktop: pointer + keyboard
-   ========================= */
+/* ===== Input (stable) ===== */
 let holdTimer = null;
 let holding = false;
 let holdStart = 0;
@@ -798,11 +966,11 @@ function resetHoldUI(){
 
 function onTouchStart(e){
   e.preventDefault();
-  if(e.target.closest("button")) return;
+  if(e.target.closest("button") || e.target.closest("input")) return;
 
   if(!running){
     startGame();
-    // เริ่มแล้วให้กระโดดได้ทันที 1 ครั้ง (ฟีลลื่น)
+    // เริ่มแล้วกระโดด 1 ครั้งทันที
     setTimeout(() => jump(), 0);
     return;
   }
@@ -818,7 +986,7 @@ function onTouchStart(e){
 
 function onTouchEnd(e){
   e.preventDefault();
-  if(e.target.closest("button")) return;
+  if(e.target.closest("button") || e.target.closest("input")) return;
 
   clearTimeout(holdTimer);
   resetHoldUI();
@@ -838,8 +1006,8 @@ document.addEventListener("touchend", onTouchEnd, {passive:false});
 document.addEventListener("touchcancel", onTouchEnd, {passive:false});
 
 document.addEventListener("pointerdown", (e) => {
-  if(IS_TOUCH) return;               // IMPORTANT: no duplicate on mobile
-  if(e.target.closest("button")) return;
+  if(IS_TOUCH) return;
+  if(e.target.closest("button") || e.target.closest("input")) return;
   if(!running){ startGame(); return; }
   jump();
 });
@@ -862,10 +1030,11 @@ document.addEventListener("keyup", (e) => {
   }
 });
 
-/* UI buttons */
+/* ===== UI ===== */
 startBtn.addEventListener("click", () => startGame());
 playAgainBtn.addEventListener("click", () => startGame());
 closeBtn.addEventListener("click", () => overlay.style.display = "none");
+
 howBtn.addEventListener("click", () => {
   overlay.style.display = "flex";
   ovTitle.textContent = "HOW TO PLAY";
@@ -875,11 +1044,16 @@ howBtn.addEventListener("click", () => {
   ovPrizeNote.textContent = "*ถึง 100/200/400 จะได้รางวัลตามเงื่อนไข";
 });
 
-// init
+playerNameInput.addEventListener("input", () => {
+  startBtn.disabled = playerNameInput.value.trim().length === 0;
+});
+
+// Init
+renderLB();
+highEl.textContent = (loadLB()[0]?.score || 0);
 resetGame();
 drawBackground();
 drawPlayer();
 </script>
 </body>
 </html>
-
