@@ -1,203 +1,866 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 <title>realme Game Day</title>
 
 <style>
 :root{
-  --realme:#FFD400;
-  --card:#ffffff;
+  --rm-yellow:#FFD400;
+  --ink:#111;
+  --card: rgba(255,255,255,.92);
+  --stroke: rgba(17,17,17,.10);
+  --shadow: 0 18px 55px rgba(0,0,0,.22);
+  --r-xl: 26px;
+  --r-lg: 18px;
+  --pill: 999px;
 }
-
+*{box-sizing:border-box}
+html,body{height:100%}
 body{
   margin:0;
-  background:var(--realme);
-  font-family:Arial, sans-serif;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, rgba(255,255,255,.28), rgba(255,255,255,0) 55%),
+    linear-gradient(180deg, #FFD400 0%, #FFC800 100%);
+  color:var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+               Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
   text-align:center;
+
+  /* ✅ scroll ได้ก่อนเริ่มเกม */
+  overflow:auto;
+  overscroll-behavior:auto;
+  touch-action:auto;
+}
+body.lockScroll{
+  /* ✅ เริ่มเล่นค่อยล็อค scroll */
+  overflow:hidden;
+  overscroll-behavior:none;
+  touch-action:manipulation;
 }
 
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:20px;
+.header{margin:22px 0 10px}
+.brand{font-size:56px;font-weight:1000;letter-spacing:-0.9px;line-height:1}
+.tagline{margin:6px 0 0;font-size:13px;font-weight:900;color:rgba(17,17,17,.55)}
+
+.panel{
+  width:min(1020px, 94vw);
+  margin:0 auto;
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
+  border:1px solid var(--stroke);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow);
+  padding:16px 16px 14px;
+  backdrop-filter: blur(6px);
 }
+
+.hud{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr)) minmax(280px, 1.35fr);
+  gap:12px;
+  align-items:stretch;
+  margin-bottom:12px;
+}
+.pillCard{
+  background: rgba(255,255,255,.92);
+  border:1px solid var(--stroke);
+  border-radius: var(--r-lg);
+  padding:12px 14px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+  text-align:left;
+}
+.pillCard small{
+  display:block;
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.35px;
+  text-transform:uppercase;
+  color:rgba(17,17,17,.55);
+  margin-bottom:6px;
+}
+.pillCard b{font-size:24px;font-weight:1000;letter-spacing:-.4px}
+
+.rewardBox{
+  background: rgba(255,255,255,.92);
+  border:1px solid var(--stroke);
+  border-radius: var(--r-lg);
+  padding:12px 14px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+  text-align:left;
+}
+.rewardTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px}
+.rewardTitle b{font-size:12px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase;color:rgba(17,17,17,.65)}
+.badge{
+  padding:7px 10px;border-radius:var(--pill);
+  background:rgba(17,17,17,.08);
+  border:1px solid rgba(17,17,17,.10);
+  font-size:12px;font-weight:1000;color:rgba(17,17,17,.70);
+  white-space:nowrap;
+}
+.badge.win{background:#111;color:#fff;border-color:transparent}
+.rewardList{margin:0;padding-left:16px;font-size:13px;line-height:1.45;color:rgba(17,17,17,.78)}
+.rewardList li{margin:6px 0}
+.rewardList li.done{color:#000;font-weight:1000}
+
+.topControls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:6px 0 10px;
+}
+.input{
+  width:min(520px, 92vw);
+  background:#fff;
+  border:1px solid rgba(17,17,17,.14);
+  border-radius: var(--pill);
+  padding:14px 16px;
+  font-size:16px;
+  font-weight:900;
+  outline:none;
+  box-shadow: 0 10px 22px rgba(0,0,0,.08);
+}
+.input::placeholder{color:rgba(17,17,17,.45);font-weight:900}
+
+.btnrow{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+button{
+  border:none;cursor:pointer;border-radius:var(--pill);
+  padding:14px 28px;min-width:180px;min-height:54px;
+  font-size:18px;font-weight:1000;letter-spacing:.2px;
+  background:#111;color:#fff;
+  box-shadow:0 12px 26px rgba(0,0,0,.20);
+  transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+button.secondary{background:#fff;color:#111;border:1px solid rgba(17,17,17,.14);box-shadow:0 10px 22px rgba(0,0,0,.10)}
+button:active{transform:translateY(1px) scale(.98);box-shadow:0 8px 18px rgba(0,0,0,.22)}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
 
 canvas{
-  background:#f5f5f5;
-  border-radius:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
-  width:100%;
-  height:420px;
-  max-height:520px;
+  width:min(980px, 94vw);
+  display:block;
+  margin:0 auto;
+  background: linear-gradient(180deg, #FFF7D0 0%, #FFFFFF 65%);
+  border-radius: var(--r-lg);
+  border:1px solid rgba(17,17,17,.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+  touch-action:none;
 }
 
-input{
-  width:90%;
-  padding:12px;
-  font-size:16px;
-  border-radius:25px;
-  border:none;
-  margin:15px 0;
+.holdbar{
+  margin:10px auto 0;
+  width:min(980px, 94vw);
+  height:10px;
+  border-radius: var(--pill);
+  background: rgba(17,17,17,.08);
+  overflow:hidden;
 }
+.holdfill{height:100%;width:0%;border-radius:var(--pill);background:rgba(0,0,0,.90);transition:width .08s linear}
 
-button{
-  padding:14px 40px;
-  font-size:18px;
-  border-radius:30px;
-  border:none;
-  cursor:pointer;
-  margin:8px;
+.hint{
+  margin:12px auto 0;
+  width:min(980px,94vw);
+  font-size:13px;
+  line-height:1.45;
+  color:rgba(17,17,17,.68)
 }
+.hint strong{color:rgba(0,0,0,.92)}
 
-.start{
-  background:black;
-  color:white;
+.leaderboard{
+  width:min(1020px, 94vw);
+  margin:14px auto 22px;
+  background: rgba(255,255,255,.78);
+  border:1px solid rgba(17,17,17,.10);
+  border-radius: var(--r-xl);
+  box-shadow: 0 14px 40px rgba(0,0,0,.14);
+  padding:14px 14px 12px;
+  text-align:left;
 }
+.lbHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.lbHead .title{font-weight:1000;letter-spacing:.25px}
+.lbHead .sub{color:rgba(17,17,17,.55);font-size:12px;font-weight:900}
 
-.secondary{
-  background:white;
+table{width:100%;border-collapse:separate;border-spacing:0;border-radius:16px;border:1px solid rgba(17,17,17,.10);background:#fff;overflow:hidden}
+thead th{
+  text-align:left;font-size:12px;letter-spacing:.35px;text-transform:uppercase;
+  padding:10px 12px;color:rgba(17,17,17,.60);
+  background: rgba(17,17,17,.04);
+  border-bottom:1px solid rgba(17,17,17,.08);
 }
+tbody td{padding:10px 12px;border-bottom:1px solid rgba(17,17,17,.08);font-weight:900}
+tbody tr:last-child td{border-bottom:none}
+.rank{width:70px;color:rgba(17,17,17,.60);font-weight:1000}
+.dateCell{color:rgba(17,17,17,.55);font-weight:900;font-size:12px;white-space:nowrap}
 
-@media(max-width:768px){
+#overlay{
+  position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.55);padding:16px;z-index:999;
+}
+.modal{
+  width:min(560px,92vw);
+  background:rgba(255,255,255,.96);
+  border-radius: var(--r-xl);
+  padding:18px 18px 16px;
+  box-shadow:0 18px 60px rgba(0,0,0,.35);
+  border:1px solid rgba(17,17,17,.10);
+  text-align:left;
+}
+.modal h1{margin:4px 0 8px;font-size:34px;font-weight:1000;letter-spacing:-.6px;text-align:center}
+.modal p{margin:0;text-align:center;color:rgba(17,17,17,.70);font-weight:900;line-height:1.4}
+.modal .scoreline{margin-top:12px;text-align:center;font-weight:1000;font-size:18px}
+
+.prizeCard{
+  margin-top:12px;background:rgba(255,249,217,.9);
+  border:1px solid rgba(17,17,17,.10);
+  border-radius: var(--r-lg);
+  padding:12px;text-align:center;
+}
+.prizeCard .label{font-size:12px;font-weight:1000;letter-spacing:.35px;text-transform:uppercase;color:rgba(17,17,17,.60)}
+.prizeCard .prize{margin-top:6px;font-size:20px;font-weight:1000}
+.prizeCard .note{margin-top:6px;font-size:12px;color:rgba(17,17,17,.60);line-height:1.4}
+
+@media (max-width:860px){
+  .brand{font-size:46px}
+  .hud{grid-template-columns:repeat(2,1fr)}
+  .rewardBox{grid-column:1/-1}
+  button{width:88%;font-size:20px;padding:16px 0;min-width:0}
   canvas{
-    height:55vh;
+    height:52vh;
+    max-height:560px;
     min-height:360px;
   }
+  .hint{font-size:12px}
 }
 </style>
 </head>
 
 <body>
+  <div class="header">
+    <div class="brand">realme Game Day</div>
+    <div class="tagline">Jump • Double Jump • Slide • Collect Stars</div>
+  </div>
 
-<div class="container">
+  <div class="panel">
+    <div class="hud">
+      <div class="pillCard"><small>Score</small><b id="score">0</b></div>
+      <div class="pillCard"><small>Goal</small><b id="goal">∞</b></div>
+      <div class="pillCard"><small>High</small><b id="high">0</b></div>
 
-<h1>realme Game Day</h1>
+      <div class="rewardBox">
+        <div class="rewardTitle">
+          <b>🎁 Rewards (ตามคะแนน)</b>
+          <span class="badge" id="rewardBadge">Keep playing</span>
+        </div>
+        <ul class="rewardList">
+          <li id="r100">≥ 100 : Voucher discount 333</li>
+          <li id="r200">≥ 200 : realme bag</li>
+          <li id="r400">≥ 400 : realme speaker</li>
+        </ul>
+      </div>
+    </div>
 
-<input id="playerName" placeholder="กรอกชื่อก่อนเล่น">
+    <!-- ✅ ชื่ออยู่บน ตามที่ทีมอยากได้ -->
+    <div class="topControls">
+      <input id="playerName" class="input" maxlength="20" placeholder="กรอกชื่อก่อนเล่น (เช่น First)" autocomplete="off" />
+      <div class="btnrow">
+        <button id="startBtn" disabled>Start</button>
+        <button id="howBtn" class="secondary" type="button">How to play</button>
+      </div>
+    </div>
 
-<canvas id="game" width="900" height="420"></canvas>
+    <canvas id="game" width="980" height="520"></canvas>
+    <div class="holdbar"><div class="holdfill" id="holdfill"></div></div>
 
-<br>
-<button class="start" onclick="startGame()">Start</button>
-<button class="secondary" onclick="location.reload()">Reset</button>
+    <div class="hint">
+      <div><strong>มือถือ:</strong> แตะตรงไหนก็ได้ = Jump (2x) • กดค้าง = Slide</div>
+      <div><strong>คอม:</strong> Space/Click = Jump (2x) • Hold S/↓ = Slide</div>
+      <div>เก็บดาว = <strong>+2</strong> คะแนน • คะแนนไม่จำกัด เล่นจนกว่าจะตาย</div>
+    </div>
+  </div>
 
-<h3>Score: <span id="score">0</span></h3>
+  <div class="leaderboard">
+    <div class="lbHead">
+      <div class="title">🏆 Top Score (Online)</div>
+      <div class="sub" id="lbStatus">กำลังโหลด...</div>
+    </div>
 
-</div>
+    <table>
+      <thead>
+        <tr>
+          <th class="rank">Rank</th>
+          <th>Name</th>
+          <th style="width:140px;">Score</th>
+          <th style="width:170px;">Reward</th>
+          <th style="width:170px;">Date</th>
+        </tr>
+      </thead>
+      <tbody id="lbBody"></tbody>
+    </table>
+  </div>
+
+  <div id="overlay">
+    <div class="modal">
+      <h1 id="ovTitle">GAME OVER</h1>
+      <p id="ovDesc">โดนสิ่งกีดขวางแล้ว 😭</p>
+      <div class="scoreline">คะแนน: <span id="ovScore">0</span></div>
+
+      <div class="prizeCard">
+        <div class="label">🎁 Your reward</div>
+        <div class="prize" id="ovPrize">—</div>
+        <div class="note" id="ovPrizeNote">*ทริค: กดค้าง Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม</div>
+      </div>
+
+      <div class="btnrow" style="margin-top:14px; justify-content:center;">
+        <button id="playAgainBtn">Play Again</button>
+        <button id="closeBtn" class="secondary">Close</button>
+      </div>
+    </div>
+  </div>
 
 <script>
+/** =========================
+ *  Google Apps Script Web App URL (/exec) — ใช้ตามเดิม
+ * ========================= */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAyUPknNkK9pQWPvX6Eckd2GothRzvRX9gwdCFdCdlx4zwmj4o38KXOx3ArTSy-8gL/exec";
 
-/* ====== ใส่ URL ของคุณตรงนี้ ====== */
-const SCRIPT_URL = "ใส่ exec URL ของคุณตรงนี้";
-const SCRIPT_URL_LINE = "ใส่ googleusercontent URL ของคุณตรงนี้";
-/* ================================== */
-
-function pickScript(){
-  const isLINE = /Line/i.test(navigator.userAgent);
-  if(isLINE && SCRIPT_URL_LINE.includes("googleusercontent")){
-    return SCRIPT_URL_LINE;
-  }
-  return SCRIPT_URL;
-}
-
-/* ====== GAME ====== */
-
+/* ===== DOM ===== */
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-let player = {x:50,y:350,w:40,h:40,vy:0,jumpCount:0};
-let gravity = 0.8;
-let obstacles = [];
-let score = 0;
-let running = false;
+const scoreEl = document.getElementById("score");
+const highEl  = document.getElementById("high");
+const holdFillEl = document.getElementById("holdfill");
 
-function startGame(){
-  if(!document.getElementById("playerName").value.trim()) return alert("กรอกชื่อก่อน");
-  running = true;
-  score = 0;
-  obstacles = [];
-  player.y=350;
-  player.vy=0;
-  player.jumpCount=0;
-  loop();
+const playerNameInput = document.getElementById("playerName");
+const startBtn = document.getElementById("startBtn");
+const howBtn = document.getElementById("howBtn");
+
+const overlay = document.getElementById("overlay");
+const ovTitle = document.getElementById("ovTitle");
+const ovDesc  = document.getElementById("ovDesc");
+const ovScore = document.getElementById("ovScore");
+const ovPrize = document.getElementById("ovPrize");
+const ovPrizeNote = document.getElementById("ovPrizeNote");
+const playAgainBtn = document.getElementById("playAgainBtn");
+const closeBtn = document.getElementById("closeBtn");
+
+const rewardBadge = document.getElementById("rewardBadge");
+const r100 = document.getElementById("r100");
+const r200 = document.getElementById("r200");
+const r400 = document.getElementById("r400");
+
+const lbBody = document.getElementById("lbBody");
+const lbStatus = document.getElementById("lbStatus");
+
+/* ===== Mobile responsiveness tuning ===== */
+const HOLD_MS = 120;    // กดค้างเพื่อ Slide
+const TAP_DELAY = 40;   // แตะเร็ว = jump ไว
+
+function escapeHtml(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-function loop(){
-  if(!running) return;
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+function getRewardByScore(s){
+  if(s >= 400) return "realme speaker";
+  if(s >= 200) return "realme bag";
+  if(s >= 100) return "Voucher discount 333";
+  return "—";
+}
 
-  player.vy+=gravity;
-  player.y+=player.vy;
+/* ===== Online Leaderboard (JSONP) ===== */
+function loadTopOnline(){
+  return new Promise((resolve, reject) => {
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const script = document.createElement("script");
 
-  if(player.y>350){
-    player.y=350;
-    player.vy=0;
-    player.jumpCount=0;
+    window[cb] = (data) => {
+      try{
+        delete window[cb];
+        script.remove();
+      }catch(_){}
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      try{ delete window[cb]; script.remove(); }catch(_){}
+      reject(new Error("load failed"));
+    };
+
+    script.src = `${SCRIPT_URL}?action=top&limit=10&callback=${cb}&_=${Date.now()}`;
+    document.body.appendChild(script);
+  });
+}
+
+function renderLB(top){
+  lbBody.innerHTML = "";
+  if(!top || top.length === 0){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="rank">—</td><td colspan="4" style="color:rgba(17,17,17,.55); font-weight:900;">ยังไม่มีคะแนน — เล่นเพื่อขึ้นอันดับ!</td>`;
+    lbBody.appendChild(tr);
+    return;
   }
 
-  ctx.fillStyle="black";
-  ctx.fillRect(player.x,player.y,player.w,player.h);
-
-  if(Math.random()<0.02){
-    obstacles.push({x:900,y:350,w:30,h:40});
-  }
-
-  obstacles.forEach(o=>{
-    o.x-=5;
-    ctx.fillRect(o.x,o.y,o.w,o.h);
-
-    if(o.x<player.x+player.w &&
-       o.x+o.w>player.x &&
-       o.y<player.y+player.h &&
-       o.y+o.h>player.y){
-         endGame();
-       }
+  top.forEach((row, idx) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="rank">#${idx+1}</td>
+      <td>${escapeHtml(row.name)}</td>
+      <td>${row.score}</td>
+      <td>${escapeHtml(row.reward)}</td>
+      <td class="dateCell">${escapeHtml(String(row.ts || row.date || ""))}</td>
+    `;
+    lbBody.appendChild(tr);
   });
 
-  obstacles = obstacles.filter(o=>o.x>-50);
+  highEl.textContent = top[0]?.score ?? 0;
+}
 
-  score++;
-  document.getElementById("score").innerText=score;
+async function refreshLB(){
+  try{
+    lbStatus.textContent = "กำลังโหลด...";
+    const data = await loadTopOnline();
+    if(!data || !data.ok){
+      lbStatus.textContent = "โหลดไม่ได้ (ลองใหม่)";
+      renderLB([]);
+      return;
+    }
+    lbStatus.textContent = "อัปเดตล่าสุด: " + new Date().toLocaleTimeString();
+    renderLB(data.top || []);
+  }catch(e){
+    lbStatus.textContent = "โหลดไม่ได้ (เช็ก Deploy/URL)";
+    renderLB([]);
+  }
+}
+
+/* ===== Submit Score (best-effort) ===== */
+function submitScoreOnline(name, score){
+  if(!SCRIPT_URL) return;
+  const n = String(name || "").trim().slice(0,20);
+  if(!n) return;
+
+  const s = Number(score || 0);
+  const ua = (navigator.userAgent || "").slice(0,180);
+
+  const url = `${SCRIPT_URL}?name=${encodeURIComponent(n)}&score=${encodeURIComponent(String(s))}&ua=${encodeURIComponent(ua)}&_=${Date.now()}`;
+
+  try{
+    if(navigator.sendBeacon){
+      const blob = new Blob(["1"], {type:"text/plain"});
+      navigator.sendBeacon(url, blob);
+    }
+  }catch(_){}
+
+  try{
+    fetch(url, { mode:"no-cors", cache:"no-store", keepalive:true }).catch(()=>{});
+  }catch(_){}
+
+  try{
+    const img = new Image();
+    img.referrerPolicy = "no-referrer";
+    img.src = url;
+  }catch(_){}
+}
+
+/* ===== Game ===== */
+let running=false, lastTime=0, score=0;
+const groundY=390;
+const speedBase=440;
+
+const player={ x:140, y:groundY-52, w:52, h:52, vy:0, jumps:0, sliding:false, slideH:30, normalH:52 };
+const gravity=2350, jumpVel=-880;
+
+let obstacles=[], stars=[], spawnT=0, starSpawnT=0, surviveAcc=0;
+
+function updateRewardUI(){
+  r100.classList.toggle("done", score >= 100);
+  r200.classList.toggle("done", score >= 200);
+  r400.classList.toggle("done", score >= 400);
+
+  if(score >= 400){ rewardBadge.textContent="Unlocked: speaker"; rewardBadge.classList.add("win"); }
+  else if(score >= 200){ rewardBadge.textContent="Unlocked: bag"; rewardBadge.classList.add("win"); }
+  else if(score >= 100){ rewardBadge.textContent="Unlocked: voucher"; rewardBadge.classList.add("win"); }
+  else { rewardBadge.textContent="Keep playing"; rewardBadge.classList.remove("win"); }
+}
+
+function lockScroll(on){
+  document.body.classList.toggle("lockScroll", !!on);
+}
+
+function resetGame(){
+  running=false;
+  score=0;
+  scoreEl.textContent=score;
+
+  player.y=groundY-player.normalH;
+  player.h=player.normalH;
+  player.vy=0;
+  player.jumps=0;
+  player.sliding=false;
+
+  obstacles=[]; stars=[];
+  spawnT=0; starSpawnT=0; surviveAcc=0;
+  holdFillEl.style.width="0%";
+  updateRewardUI();
+
+  lockScroll(false);
+}
+
+function startGame(){
+  const name = playerNameInput.value.trim();
+  if(!name){ playerNameInput.focus(); return; }
+
+  resetGame();
+  running=true;
+  overlay.style.display="none";
+  lastTime=0;
+
+  lockScroll(true);
 
   requestAnimationFrame(loop);
 }
 
 function endGame(){
+  const name = playerNameInput.value.trim() || "Player";
+  const reward = getRewardByScore(score);
+
+  submitScoreOnline(name, score);
+  setTimeout(refreshLB, 1200);
+
   running=false;
-  submitScore();
+  lockScroll(false);
+
+  ovPrize.textContent = reward;
+  ovScore.textContent = score;
+
+  ovTitle.textContent="GAME OVER";
+  ovDesc.textContent="โดนสิ่งกีดขวางแล้ว 😭";
+  ovPrizeNote.textContent="*ทริค: กดค้าง Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม";
+
+  overlay.style.display="flex";
+}
+
+function addScore(n){
+  score += n; // ✅ ไม่จำกัดคะแนน
+  scoreEl.textContent = score;
+  updateRewardUI();
 }
 
 function jump(){
-  if(player.jumpCount<2){
-    player.vy=-12;
-    player.jumpCount++;
+  if(!running) return;
+  if(player.jumps < 2){
+    player.vy = jumpVel;
+    player.jumps++;
+  }
+}
+function setSlide(on){
+  if(!running) return;
+  player.sliding = on;
+  player.h = on ? player.slideH : player.normalH;
+  if(player.y + player.h > groundY) player.y = groundY - player.h;
+}
+
+function spawnObstacle(){
+  const r=Math.random();
+  let type="mid";
+  if(r<0.36) type="low";
+  else if(r<0.74) type="tall";
+
+  let w=30,h=52;
+  if(type==="low"){w=42;h=40;}
+  if(type==="tall"){w=26;h=98;}
+
+  obstacles.push({ x: canvas.width+40, y: groundY-h, w, h, type });
+}
+function spawnStar(){
+  const lanes=[groundY-140, groundY-190, groundY-110];
+  const y=lanes[(Math.random()*lanes.length)|0];
+  stars.push({ x: canvas.width+40, y, r:14, taken:false });
+}
+function aabb(ax,ay,aw,ah,bx,by,bw,bh){
+  return ax<bx+bw && ax+aw>bx && ay<by+bh && ay+ah>by;
+}
+function roundRect(x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function drawBackground(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // road
+  ctx.fillStyle="rgba(0,0,0,.88)";
+  ctx.fillRect(0, groundY, canvas.width, 4);
+
+  // dashed lane
+  ctx.strokeStyle="rgba(0,0,0,.14)";
+  ctx.lineWidth=3;
+  ctx.setLineDash([16,12]);
+  ctx.beginPath();
+  ctx.moveTo(0, groundY-30);
+  ctx.lineTo(canvas.width, groundY-30);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+function drawPlayer(){
+  const px=player.x, py=player.y, w=player.w, h=player.h;
+
+  // shadow
+  ctx.fillStyle="rgba(0,0,0,.10)";
+  ctx.beginPath();
+  ctx.ellipse(px+w/2, groundY+14, w/2.2, 11, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  // body
+  ctx.fillStyle="#111";
+  roundRect(px,py,w,h,16); ctx.fill();
+
+  // screen
+  ctx.fillStyle="#0f2b3a";
+  roundRect(px+7,py+7,w-14,Math.max(12,h-18),12); ctx.fill();
+
+  // logo text
+  ctx.fillStyle="#FFD400";
+  ctx.font="bold 13px Arial";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText("realme", px+w/2, py+h/2);
+}
+function drawObstacle(o){
+  ctx.fillStyle="rgba(0,0,0,.92)";
+  roundRect(o.x,o.y,o.w,o.h,12); ctx.fill();
+}
+function drawStar(s){
+  ctx.save();
+  ctx.translate(s.x,s.y);
+
+  ctx.fillStyle="rgba(255,212,0,.30)";
+  ctx.beginPath(); ctx.arc(0,0,24,0,Math.PI*2); ctx.fill();
+
+  ctx.fillStyle="#FFD400";
+  ctx.beginPath();
+  const spikes=5, outerR=14, innerR=6.5;
+  let rot=Math.PI/2*3, step=Math.PI/spikes;
+  ctx.moveTo(0,-outerR);
+  for(let i=0;i<spikes;i++){
+    ctx.lineTo(Math.cos(rot)*outerR, Math.sin(rot)*outerR); rot+=step;
+    ctx.lineTo(Math.cos(rot)*innerR, Math.sin(rot)*innerR); rot+=step;
+  }
+  ctx.closePath(); ctx.fill();
+
+  ctx.restore();
+}
+function tickSurvive(dt){
+  surviveAcc += dt;
+  if(surviveAcc >= 0.65){
+    surviveAcc = 0;
+    addScore(1);
   }
 }
 
-document.addEventListener("keydown",e=>{
-  if(e.code==="Space") jump();
+function loop(t){
+  if(!running) return;
+
+  const dt=Math.min(0.033, (t-lastTime)/1000 || 0);
+  lastTime=t;
+
+  const speed = speedBase + Math.min(680, score*0.85);
+
+  spawnT += dt;
+  starSpawnT += dt;
+
+  if(spawnT > (1.05 + Math.random()*0.70)){ spawnObstacle(); spawnT=0; }
+  if(starSpawnT > (0.95 + Math.random()*1.30)){ spawnStar(); starSpawnT=0; }
+
+  // physics
+  player.vy += gravity*dt;
+  player.y += player.vy*dt;
+
+  if(player.y + player.h >= groundY){
+    player.y = groundY - player.h;
+    player.vy = 0;
+    player.jumps = 0;
+  }
+
+  // move entities
+  for(const o of obstacles) o.x -= speed*dt;
+  obstacles = obstacles.filter(o => o.x + o.w > -40);
+
+  for(const s of stars) s.x -= (speed*0.95)*dt;
+  stars = stars.filter(s => s.x > -60 && !s.taken);
+
+  // collisions
+  for(const o of obstacles){
+    if(aabb(player.x,player.y,player.w,player.h,o.x,o.y,o.w,o.h)){
+      endGame(); return;
+    }
+  }
+  for(const s of stars){
+    const bx=s.x-s.r, by=s.y-s.r, bw=s.r*2, bh=s.r*2;
+    if(aabb(player.x,player.y,player.w,player.h,bx,by,bw,bh)){
+      s.taken=true;
+      addScore(2);
+    }
+  }
+
+  tickSurvive(dt);
+
+  // draw
+  drawBackground();
+  for(const s of stars) drawStar(s);
+  for(const o of obstacles) drawObstacle(o);
+  drawPlayer();
+
+  requestAnimationFrame(loop);
+}
+
+/* ===== Hold UI ===== */
+let holdRAF=null, holdStart=0;
+function startHoldUI(){
+  holdStart=performance.now();
+  cancelAnimationFrame(holdRAF);
+  const step=()=>{
+    const p=Math.min(1, (performance.now()-holdStart)/HOLD_MS);
+    holdFillEl.style.width=(p*100).toFixed(0)+"%";
+    if(p<1) holdRAF=requestAnimationFrame(step);
+  };
+  holdRAF=requestAnimationFrame(step);
+}
+function resetHoldUI(){
+  cancelAnimationFrame(holdRAF);
+  holdFillEl.style.width="0%";
+}
+
+/* ===== Controls (tap anywhere on mobile) ===== */
+let holdTimer=null, tapTimer=null, holding=false;
+
+function shouldIgnoreTarget(target){
+  return target.closest("button") || target.closest("input") || target.closest("#overlay") || target.closest("table");
+}
+
+function handlePressStart(e){
+  if(shouldIgnoreTarget(e.target)) return;
+
+  // กัน scroll เฉพาะตอนเล่น
+  if(running) e.preventDefault();
+
+  if(!running){
+    startGame();
+    tapTimer = setTimeout(()=> jump(), 0);
+    return;
+  }
+
+  holding=false;
+  startHoldUI();
+
+  clearTimeout(tapTimer);
+  clearTimeout(holdTimer);
+
+  tapTimer = setTimeout(()=>{
+    if(!holding) jump();
+  }, TAP_DELAY);
+
+  holdTimer = setTimeout(()=>{
+    holding=true;
+    clearTimeout(tapTimer);
+    setSlide(true);
+  }, HOLD_MS);
+}
+
+function handlePressEnd(e){
+  if(shouldIgnoreTarget(e.target)) return;
+  if(running) e.preventDefault();
+
+  clearTimeout(holdTimer);
+  clearTimeout(tapTimer);
+  resetHoldUI();
+
+  if(!running) return;
+
+  if(holding) setSlide(false);
+  holding=false;
+}
+
+/* pointer events */
+document.addEventListener("pointerdown", (e)=>{
+  if(document.activeElement && document.activeElement.tagName === "INPUT") return;
+
+  if(e.pointerType === "touch" || e.pointerType === "pen"){
+    handlePressStart(e);
+    return;
+  }
+
+  if(shouldIgnoreTarget(e.target)) return;
+  if(!running){ startGame(); return; }
+  jump();
+}, {passive:false});
+
+document.addEventListener("pointerup", (e)=>{
+  if(e.pointerType === "touch" || e.pointerType === "pen") handlePressEnd(e);
+}, {passive:false});
+
+document.addEventListener("pointercancel", (e)=>{
+  if(e.pointerType === "touch" || e.pointerType === "pen") handlePressEnd(e);
+}, {passive:false});
+
+/* keyboard */
+document.addEventListener("keydown", (e)=>{
+  if(document.activeElement && document.activeElement.tagName === "INPUT") return;
+
+  if(e.code==="Space"){
+    e.preventDefault();
+    if(!running){ startGame(); return; }
+    jump();
+  }
+  if(e.code==="KeyS" || e.code==="ArrowDown"){
+    e.preventDefault();
+    if(running) setSlide(true);
+  }
+});
+document.addEventListener("keyup", (e)=>{
+  if(document.activeElement && document.activeElement.tagName === "INPUT") return;
+
+  if(e.code==="KeyS" || e.code==="ArrowDown"){
+    e.preventDefault();
+    if(running) setSlide(false);
+  }
 });
 
-/* ====== Submit Score (LINE SAFE) ====== */
+/* UI */
+startBtn.addEventListener("click", startGame);
+playAgainBtn.addEventListener("click", startGame);
+closeBtn.addEventListener("click", ()=> overlay.style.display="none");
 
-function submitScore(){
-  const base = pickScript();
-  const name = document.getElementById("playerName").value.trim();
-  const url = `${base}?name=${encodeURIComponent(name)}&score=${score}&_=${Date.now()}`;
+howBtn.addEventListener("click", ()=>{
+  overlay.style.display="flex";
+  ovTitle.textContent="HOW TO PLAY";
+  ovDesc.textContent="แตะ = Jump (2x) • กดค้าง = Slide • เก็บดาว +2 • คะแนนไม่จำกัด";
+  ovScore.textContent=score;
+  ovPrize.textContent=getRewardByScore(score);
+  ovPrizeNote.textContent="*ถึง 100/200/400 จะได้รางวัลตามเงื่อนไข";
+});
 
-  if(navigator.sendBeacon){
-    navigator.sendBeacon(url,new Blob(["1"],{type:"text/plain"}));
-  }
+playerNameInput.addEventListener("input", ()=>{
+  startBtn.disabled = playerNameInput.value.trim().length===0;
+});
 
-  fetch(url,{mode:"no-cors",keepalive:true}).catch(()=>{});
-
-  const img=new Image();
-  img.src=url;
-}
-
+/* init */
+resetGame();
+drawBackground();
+drawPlayer();
+refreshLB();
+setInterval(refreshLB, 15000);
 </script>
-
 </body>
 </html>
