@@ -27,15 +27,23 @@ html,body{
                Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
   -webkit-font-smoothing: antialiased;
   text-align:center;
+
+  /* ✅ allow scroll by default (before game start) */
+  overflow:auto;
+  overscroll-behavior:auto;
+  touch-action:auto;
+}
+body.lockScroll{
+  /* ✅ lock scroll only while playing */
   overflow:hidden;
   overscroll-behavior:none;
   touch-action:manipulation;
-  user-select:none;
-  -webkit-user-select:none;
 }
+
 .header{margin:22px 0 10px}
 .brand{font-size:56px;font-weight:1000;letter-spacing:-0.9px;line-height:1}
 .tagline{margin:6px 0 0;font-size:13px;font-weight:900;color:rgba(17,17,17,.55)}
+
 .panel{
   width:min(980px, 94vw);
   margin:0 auto;
@@ -46,6 +54,7 @@ html,body{
   padding:16px 16px 14px;
   backdrop-filter: blur(6px);
 }
+
 .hud{
   display:grid;
   grid-template-columns: repeat(3, minmax(120px, 1fr)) minmax(280px, 1.35fr);
@@ -71,6 +80,7 @@ html,body{
   margin-bottom:6px;
 }
 .pillCard b{font-size:24px;font-weight:1000;letter-spacing:-.4px}
+
 .rewardBox{
   background: rgba(255,255,255,.92);
   border:1px solid var(--stroke);
@@ -104,6 +114,7 @@ canvas{
   box-shadow: 0 10px 24px rgba(0,0,0,.10);
   touch-action:none;
 }
+
 .holdbar{
   margin:10px auto 0;
   width:min(940px, 94vw);
@@ -113,6 +124,7 @@ canvas{
   overflow:hidden;
 }
 .holdfill{height:100%;width:0%;border-radius:var(--pill);background:rgba(0,0,0,.90);transition:width .08s linear}
+
 .hint{margin:12px auto 0;width:min(940px,94vw);font-size:13px;line-height:1.45;color:rgba(17,17,17,.68)}
 .hint strong{color:rgba(0,0,0,.92)}
 
@@ -130,6 +142,7 @@ canvas{
 }
 .input::placeholder{color:rgba(17,17,17,.45);font-weight:900}
 .btnrow{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;width:100%}
+
 button{
   border:none;cursor:pointer;border-radius:var(--pill);
   padding:16px 32px;min-width:200px;min-height:56px;
@@ -144,7 +157,7 @@ button:disabled{opacity:.45;cursor:not-allowed;transform:none}
 
 .leaderboard{
   width:min(980px, 94vw);
-  margin:14px auto 0;
+  margin:14px auto 22px;
   background: rgba(255,255,255,.78);
   border:1px solid rgba(17,17,17,.10);
   border-radius: var(--r-xl);
@@ -155,6 +168,7 @@ button:disabled{opacity:.45;cursor:not-allowed;transform:none}
 .lbHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
 .lbHead .title{font-weight:1000;letter-spacing:.25px}
 .lbHead .sub{color:rgba(17,17,17,.55);font-size:12px;font-weight:900}
+
 table{width:100%;border-collapse:separate;border-spacing:0;border-radius:16px;border:1px solid rgba(17,17,17,.10);background:#fff;overflow:hidden}
 thead th{
   text-align:left;font-size:12px;letter-spacing:.35px;text-transform:uppercase;
@@ -169,7 +183,7 @@ tbody tr:last-child td{border-bottom:none}
 
 #overlay{
   position:fixed;inset:0;display:none;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.55);padding:16px;
+  background:rgba(0,0,0,.55);padding:16px;z-index:999;
 }
 .modal{
   width:min(560px,92vw);
@@ -183,6 +197,7 @@ tbody tr:last-child td{border-bottom:none}
 .modal h1{margin:4px 0 8px;font-size:34px;font-weight:1000;letter-spacing:-.6px;text-align:center}
 .modal p{margin:0;text-align:center;color:rgba(17,17,17,.70);font-weight:900;line-height:1.4}
 .modal .scoreline{margin-top:12px;text-align:center;font-weight:1000;font-size:18px}
+
 .prizeCard{
   margin-top:12px;background:rgba(255,249,217,.9);
   border:1px solid rgba(17,17,17,.10);
@@ -212,7 +227,7 @@ tbody tr:last-child td{border-bottom:none}
   <div class="panel">
     <div class="hud">
       <div class="pillCard"><small>Score</small><b id="score">0</b></div>
-      <div class="pillCard"><small>Goal</small><b id="goal">400</b></div>
+      <div class="pillCard"><small>Goal</small><b id="goal">∞</b></div>
       <div class="pillCard"><small>High</small><b id="high">0</b></div>
 
       <div class="rewardBox">
@@ -270,7 +285,7 @@ tbody tr:last-child td{border-bottom:none}
     <div class="modal">
       <h1 id="ovTitle">GAME OVER</h1>
       <p id="ovDesc">โดนสิ่งกีดขวางแล้ว 😭</p>
-      <div class="scoreline">คะแนน: <span id="ovScore">0</span> / <span id="ovGoal">400</span></div>
+      <div class="scoreline">คะแนน: <span id="ovScore">0</span></div>
 
       <div class="prizeCard">
         <div class="label">🎁 Your reward</div>
@@ -287,8 +302,7 @@ tbody tr:last-child td{border-bottom:none}
 
 <script>
 /** =========================
- *  IMPORTANT: ใส่ URL Web App ที่ Deploy ไว้
- *  เช่น https://script.google.com/macros/s/XXXX/exec
+ *  Google Apps Script Web App URL (ของคุณ)
  * ========================= */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAyUPknNkK9pQWPvX6Eckd2GothRzvRX9gwdCFdCdlx4zwmj4o38KXOx3ArTSy-8gL/exec";
 
@@ -309,7 +323,6 @@ const overlay = document.getElementById("overlay");
 const ovTitle = document.getElementById("ovTitle");
 const ovDesc  = document.getElementById("ovDesc");
 const ovScore = document.getElementById("ovScore");
-const ovGoal  = document.getElementById("ovGoal");
 const ovPrize = document.getElementById("ovPrize");
 const ovPrizeNote = document.getElementById("ovPrizeNote");
 const playAgainBtn = document.getElementById("playAgainBtn");
@@ -326,9 +339,11 @@ const lbStatus = document.getElementById("lbStatus");
 const IS_TOUCH = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
 
 /* ===== Config ===== */
-const GOAL = 400;
-goalEl.textContent = GOAL;
-ovGoal.textContent = GOAL;
+goalEl.textContent = "∞";
+
+/* Tap/hold tuning (✅ ลดดีเลย์มือถือ) */
+const HOLD_MS = 120;     // กดค้างเพื่อ Slide
+const TAP_DELAY = 40;    // แตะเร็ว = กระโดดไว
 
 function escapeHtml(s){
   return String(s)
@@ -349,11 +364,6 @@ function getRewardByScore(s){
 /* ===== Online Leaderboard (JSONP) ===== */
 function loadTopOnline(){
   return new Promise((resolve, reject) => {
-    if(!SCRIPT_URL || SCRIPT_URL.includes("PUT_YOUR_WEBAPP_URL_HERE")){
-      reject(new Error("SCRIPT_URL not set"));
-      return;
-    }
-
     const cb = "cb_" + Math.random().toString(36).slice(2);
     const script = document.createElement("script");
 
@@ -416,23 +426,16 @@ async function refreshLB(){
   }
 }
 
-/* ===== Submit Score (no-cors) ===== */
+/* ===== Submit Score (✅ ชัวร์สุดด้วย Image Beacon ไม่ติด CORS) ===== */
 function submitScoreOnline(name, score){
-  if(!SCRIPT_URL || SCRIPT_URL.includes("PUT_YOUR_WEBAPP_URL_HERE")) return;
+  if(!SCRIPT_URL) return;
 
-  const payload = {
-    name,
-    score,
-    ua: navigator.userAgent
-  };
+  const n = encodeURIComponent(String(name || "").trim().slice(0,20));
+  const s = encodeURIComponent(String(score || 0));
+  const ua = encodeURIComponent(navigator.userAgent.slice(0,180));
 
-  // no-cors: ส่งได้แน่นอน แม้อ่าน response ไม่ได้
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  }).catch(()=>{});
+  const img = new Image();
+  img.src = `${SCRIPT_URL}?name=${n}&score=${s}&ua=${ua}&_=${Date.now()}`;
 }
 
 /* ===== Game ===== */
@@ -456,6 +459,10 @@ function updateRewardUI(){
   else { rewardBadge.textContent="Keep playing"; rewardBadge.classList.remove("win"); }
 }
 
+function lockScroll(on){
+  document.body.classList.toggle("lockScroll", !!on);
+}
+
 function resetGame(){
   running=false;
   score=0;
@@ -471,6 +478,8 @@ function resetGame(){
   spawnT=0; starSpawnT=0; surviveAcc=0;
   holdFillEl.style.width="0%";
   updateRewardUI();
+
+  lockScroll(false);
 }
 
 function startGame(){
@@ -481,42 +490,37 @@ function startGame(){
   running=true;
   overlay.style.display="none";
   lastTime=0;
+
+  lockScroll(true); // ✅ เริ่มเกมค่อยล็อค scroll
+
   requestAnimationFrame(loop);
 }
 
-function endGame(type){
+function endGame(){
   const name = playerNameInput.value.trim() || "Player";
   const reward = getRewardByScore(score);
 
-  // ส่งคะแนนขึ้นออนไลน์
+  // ส่งคะแนน + อัปเดตตาราง
   submitScoreOnline(name, score);
-  // refresh leaderboard หลังส่ง (หน่วงนิด)
   setTimeout(refreshLB, 1200);
 
   running=false;
+  lockScroll(false);
 
   ovPrize.textContent = reward;
   ovScore.textContent = score;
 
-  if(type==="win"){
-    ovTitle.textContent="YOU WIN!";
-    ovDesc.textContent="คะแนนครบ 400 แล้ว 🎉";
-    ovPrizeNote.textContent="*ระบบแสดงรางวัลตามคะแนน (ปรับเงื่อนไขได้ตามแคมเปญจริง)";
-  }else{
-    ovTitle.textContent="GAME OVER";
-    ovDesc.textContent="โดนสิ่งกีดขวางแล้ว 😭";
-    ovPrizeNote.textContent="*ทริค: กดค้าง Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม";
-  }
+  ovTitle.textContent="GAME OVER";
+  ovDesc.textContent="โดนสิ่งกีดขวางแล้ว 😭";
+  ovPrizeNote.textContent="*ทริค: กดค้าง Slide หลบแท่งสูง + เก็บดาวเพิ่มแต้ม";
 
   overlay.style.display="flex";
 }
 
 function addScore(n){
-  score += n;
-  if(score > GOAL) score = GOAL;
+  score += n;                 // ✅ ไม่จำกัดคะแนนแล้ว
   scoreEl.textContent = score;
   updateRewardUI();
-  if(score >= GOAL) endGame("win");
 }
 
 function jump(){
@@ -634,7 +638,7 @@ function loop(t){
   const dt=Math.min(0.033, (t-lastTime)/1000 || 0);
   lastTime=t;
 
-  const speed = speedBase + Math.min(340, score*0.9);
+  const speed = speedBase + Math.min(540, score*0.75);
 
   spawnT += dt;
   starSpawnT += dt;
@@ -659,7 +663,7 @@ function loop(t){
 
   for(const o of obstacles){
     if(aabb(player.x,player.y,player.w,player.h,o.x,o.y,o.w,o.h)){
-      endGame("lose"); return;
+      endGame(); return;
     }
   }
   for(const s of stars){
@@ -680,10 +684,8 @@ function loop(t){
   requestAnimationFrame(loop);
 }
 
-/* ===== Input (Mobile tap anywhere) ===== */
-let holdTimer=null, holding=false, holdStart=0, holdRAF=null;
-const HOLD_MS=160;
-
+/* ===== Hold UI ===== */
+let holdRAF=null, holdStart=0;
 function startHoldUI(){
   holdStart=performance.now();
   cancelAnimationFrame(holdRAF);
@@ -699,50 +701,95 @@ function resetHoldUI(){
   holdFillEl.style.width="0%";
 }
 
-function onTouchStart(e){
-  e.preventDefault();
-  if(e.target.closest("button") || e.target.closest("input")) return;
+/* ===== Mobile: tap anywhere (✅ ไม่ดีเลย์) ===== */
+let holdTimer=null;
+let tapTimer=null;
+let holding=false;
+
+function shouldIgnorePointerTarget(target){
+  return target.closest("button") || target.closest("input") || target.closest("#overlay");
+}
+
+function handlePressStart(e){
+  if(shouldIgnorePointerTarget(e.target)) return;
+
+  // ✅ prevent scroll only while running (or starting)
+  if(running) e.preventDefault();
 
   if(!running){
     startGame();
-    setTimeout(()=>jump(),0);
+    // jump ทันที
+    tapTimer = setTimeout(()=> jump(), 0);
     return;
   }
 
   holding=false;
   startHoldUI();
+
+  clearTimeout(tapTimer);
   clearTimeout(holdTimer);
-  holdTimer=setTimeout(()=>{
+
+  // tap = jump เร็ว
+  tapTimer = setTimeout(()=>{
+    if(!holding) jump();
+  }, TAP_DELAY);
+
+  // hold = slide (ยกเลิก tap)
+  holdTimer = setTimeout(()=>{
     holding=true;
+    clearTimeout(tapTimer);
     setSlide(true);
   }, HOLD_MS);
 }
-function onTouchEnd(e){
-  e.preventDefault();
-  if(e.target.closest("button") || e.target.closest("input")) return;
+function handlePressEnd(e){
+  if(shouldIgnorePointerTarget(e.target)) return;
+  if(running) e.preventDefault();
 
   clearTimeout(holdTimer);
+  clearTimeout(tapTimer);
   resetHoldUI();
+
   if(!running) return;
 
-  if(holding) setSlide(false);
-  else jump();
-
+  if(holding){
+    setSlide(false);
+  }
   holding=false;
 }
 
-document.addEventListener("touchstart", onTouchStart, {passive:false});
-document.addEventListener("touchend", onTouchEnd, {passive:false});
-document.addEventListener("touchcancel", onTouchEnd, {passive:false});
-
+/* ✅ ใช้ pointer events ครอบคลุมมือถือ/เดสก์ท็อป */
 document.addEventListener("pointerdown", (e)=>{
-  if(IS_TOUCH) return;
-  if(e.target.closest("button") || e.target.closest("input")) return;
+  // mouse click บน desktop ให้กระโดดเมื่อกด (ถ้าไม่ได้ focus input)
+  if(document.activeElement && document.activeElement.tagName === "INPUT") return;
+
+  // ถ้าเป็น touch/pen ให้ใช้ระบบ tap/hold แบบเร็ว
+  if(e.pointerType === "touch" || e.pointerType === "pen"){
+    handlePressStart(e);
+    return;
+  }
+
+  // mouse: กดได้ทั่วหน้า แต่ไม่ไปกวน input/button
+  if(shouldIgnorePointerTarget(e.target)) return;
   if(!running){ startGame(); return; }
   jump();
-});
+}, {passive:false});
 
+document.addEventListener("pointerup", (e)=>{
+  if(e.pointerType === "touch" || e.pointerType === "pen"){
+    handlePressEnd(e);
+  }
+}, {passive:false});
+
+document.addEventListener("pointercancel", (e)=>{
+  if(e.pointerType === "touch" || e.pointerType === "pen"){
+    handlePressEnd(e);
+  }
+}, {passive:false});
+
+/* ===== Keyboard (✅ ไม่บล็อคตอนพิมพ์ชื่อ) ===== */
 document.addEventListener("keydown", (e)=>{
+  if(document.activeElement && document.activeElement.tagName === "INPUT") return;
+
   if(e.code==="Space"){
     e.preventDefault();
     if(!running){ startGame(); return; }
@@ -754,6 +801,8 @@ document.addEventListener("keydown", (e)=>{
   }
 });
 document.addEventListener("keyup", (e)=>{
+  if(document.activeElement && document.activeElement.tagName === "INPUT") return;
+
   if(e.code==="KeyS" || e.code==="ArrowDown"){
     e.preventDefault();
     if(running) setSlide(false);
@@ -768,7 +817,7 @@ closeBtn.addEventListener("click", ()=> overlay.style.display="none");
 howBtn.addEventListener("click", ()=>{
   overlay.style.display="flex";
   ovTitle.textContent="HOW TO PLAY";
-  ovDesc.textContent="แตะ = Jump (2x) • กดค้าง = Slide • เก็บดาว +2 • เป้าหมาย 400";
+  ovDesc.textContent="แตะ = Jump (2x) • กดค้าง = Slide • เก็บดาว +2 • เล่นได้เรื่อยๆจนกว่าจะตาย";
   ovScore.textContent=score;
   ovPrize.textContent=getRewardByScore(score);
   ovPrizeNote.textContent="*ถึง 100/200/400 จะได้รางวัลตามเงื่อนไข";
@@ -787,4 +836,3 @@ setInterval(refreshLB, 15000);
 </script>
 </body>
 </html>
-
