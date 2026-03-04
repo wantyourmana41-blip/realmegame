@@ -441,33 +441,41 @@ async function refreshLB(){
 }
 
 /* ===== Submit Score (best-effort) ===== */
+<script>
 function submitScoreOnline(name, score){
   if(!SCRIPT_URL) return;
+
   const n = String(name || "").trim().slice(0,20);
   if(!n) return;
 
-  const s = Number(score || 0);
+  const s = Math.max(0, Math.floor(Number(score || 0)));
   const ua = (navigator.userAgent || "").slice(0,180);
 
-  const url = `${SCRIPT_URL}?name=${encodeURIComponent(n)}&score=${encodeURIComponent(String(s))}&ua=${encodeURIComponent(ua)}&_=${Date.now()}`;
+  // ✅ POST แบบ no-cors (ไม่ต้อง CORS)
+  // ใช้ text/plain เพื่อไม่ให้โดน preflight
+  const payload = JSON.stringify({ name: n, score: s, ua });
 
+  try{
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      cache: "no-store",
+      keepalive: true,
+      headers: { "Content-Type": "text/plain;charset=UTF-8" },
+      body: payload
+    }).catch(()=>{});
+  }catch(_){}
+
+  // ✅ fallback: sendBeacon (ก็เป็น POST เหมือนกัน)
   try{
     if(navigator.sendBeacon){
-      const blob = new Blob(["1"], {type:"text/plain"});
-      navigator.sendBeacon(url, blob);
+      const blob = new Blob([payload], { type: "text/plain" });
+      navigator.sendBeacon(SCRIPT_URL, blob);
     }
   }catch(_){}
-
-  try{
-    fetch(url, { mode:"no-cors", cache:"no-store", keepalive:true }).catch(()=>{});
-  }catch(_){}
-
-  try{
-    const img = new Image();
-    img.referrerPolicy = "no-referrer";
-    img.src = url;
-  }catch(_){}
 }
+</script>
+
 
 /* ===== Game ===== */
 let running=false, lastTime=0, score=0;
@@ -865,4 +873,5 @@ setInterval(refreshLB, 15000);
 </script>
 </body>
 </html>
+
 
