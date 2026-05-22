@@ -625,25 +625,43 @@ function drawPlayer(){
   const px=player.x, py=player.y, w=player.w, h=player.h;
 
   // shadow
-  ctx.fillStyle="rgba(0,0,0,.10)";
+  ctx.fillStyle="rgba(0,0,0,.08)";
   ctx.beginPath();
-  ctx.ellipse(px+w/2, groundY+14, w/2.2, 11, 0, 0, Math.PI*2);
+  ctx.ellipse(px+w/2, groundY+12, w/2.4, 10, 0, 0, Math.PI*2);
   ctx.fill();
 
-// body
-ctx.fillStyle="#FFD400";
-roundRect(px,py,w,h,16); ctx.fill();
+  ctx.save();
 
-  // screen
-  ctx.fillStyle="#0f2b3a";
-  roundRect(px+7,py+7,w-14,Math.max(12,h-18),12); ctx.fill();
+  // center rotate
+  ctx.translate(px+w/2, py+h/2);
 
-  // logo text
- ctx.fillStyle="#111";
-  ctx.font="bold 13px Arial";
-  ctx.textAlign="center";
-  ctx.textBaseline="middle";
-  ctx.fillText("realme", px+w/2, py+h/2);
+  // rotate while jumping
+  if(player.vy !== 0){
+    ctx.rotate(player.vy * 0.0005);
+  }
+
+  // body
+  ctx.fillStyle="#FFD400";
+  ctx.strokeStyle="#111";
+  ctx.lineWidth=3;
+
+  roundRect(-w/2, -h/2, w, h, 12);
+  ctx.fill();
+  ctx.stroke();
+
+  // eyes
+  ctx.fillStyle="#111";
+
+  roundRect(-12, -10, 6, 14, 3);
+  ctx.fill();
+
+  roundRect(6, -10, 6, 14, 3);
+  ctx.fill();
+
+  // mouth
+  ctx.fillRect(-8, 10, 16, 4);
+
+  ctx.restore();
 }
 function drawObstacle(o){
   ctx.fillStyle="rgba(0,0,0,.92)";
