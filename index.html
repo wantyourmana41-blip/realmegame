@@ -48,14 +48,13 @@ body.lockScroll{
 .tagline{margin:6px 0 0;font-size:13px;font-weight:900;color:rgba(17,17,17,.55)}
 
 .panel{
-  width:min(1020px, 94vw);
+  width:min(1380px, 95vw);
   margin:0 auto;
-  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
-  border:1px solid var(--stroke);
-  border-radius: var(--r-xl);
-  box-shadow: var(--shadow);
-  padding:16px 16px 14px;
-  backdrop-filter: blur(6px);
+  background:#fffaf0;
+  border:2px solid #e7c548;
+  border-radius:32px;
+  box-shadow:0 10px 40px rgba(0,0,0,.12);
+  padding:20px;
 }
 
 .hud{
@@ -66,12 +65,12 @@ body.lockScroll{
   margin-bottom:12px;
 }
 .pillCard{
-  background: rgba(255,255,255,.92);
-  border:1px solid var(--stroke);
-  border-radius: var(--r-lg);
-  padding:12px 14px;
-  box-shadow: 0 8px 18px rgba(0,0,0,.08);
-  text-align:left;
+  background:#fff;
+  border:2px solid #f1e2a3;
+  border-radius:24px;
+  padding:18px;
+  box-shadow:none;
+  text-align:center;
 }
 .pillCard small{
   display:block;
@@ -81,6 +80,10 @@ body.lockScroll{
   text-transform:uppercase;
   color:rgba(17,17,17,.55);
   margin-bottom:6px;
+}
+.pillCard b{
+  font-size:54px;
+  font-weight:1000;
 }
 .pillCard b{font-size:24px;font-weight:1000;letter-spacing:-.4px}
 
@@ -129,12 +132,16 @@ body.lockScroll{
 
 .btnrow{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 button{
-  border:none;cursor:pointer;border-radius:var(--pill);
-  padding:14px 28px;min-width:180px;min-height:54px;
-  font-size:18px;font-weight:1000;letter-spacing:.2px;
-  background:#111;color:#fff;
-  box-shadow:0 12px 26px rgba(0,0,0,.20);
-  transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  border:none;
+  cursor:pointer;
+  border-radius:20px;
+  padding:18px 32px;
+  font-size:28px;
+  font-weight:1000;
+  background:#000;
+  color:#fff;
+  min-height:76px;
+  box-shadow:none;
 }
 button.secondary{background:#fff;color:#111;border:1px solid rgba(17,17,17,.14);box-shadow:0 10px 22px rgba(0,0,0,.10)}
 button:active{transform:translateY(1px) scale(.98);box-shadow:0 8px 18px rgba(0,0,0,.22)}
@@ -144,11 +151,10 @@ canvas{
   width:100%;
   display:block;
   margin:0 auto;
-  background: linear-gradient(180deg, #FFF7D0 0%, #FFFFFF 65%);
-  border-radius: var(--r-lg);
-  border:1px solid rgba(17,17,17,.10);
-  box-shadow: 0 10px 24px rgba(0,0,0,.10);
-  touch-action:none;
+  background:linear-gradient(180deg,#fffdf5 0%,#fff 100%);
+  border-radius:28px;
+  border:2px solid #e5c84f;
+  box-shadow:none;
 }
 
 .holdbar{
@@ -480,6 +486,17 @@ function submitScoreOnline(name, score){
 let running=false, lastTime=0, score=0;
 const groundY=390;
 const speedBase=440;
+const adImg = new Image();
+adImg.src = "fdfsdf.jpg";
+
+const adBoard = {
+  x: canvas.width + 200,
+  y: 92,
+  w: 250,
+  h: 142,
+  active: false,
+  nextScore: 20
+};
 
 const player={ x:140, y:groundY-52, w:52, h:52, vy:0, jumps:0, sliding:false, slideH:30, normalH:52 };
 const gravity=2350, jumpVel=-880;
@@ -512,8 +529,12 @@ function resetGame(){
   player.jumps=0;
   player.sliding=false;
 
-  obstacles=[]; stars=[];
-  spawnT=0; starSpawnT=0; surviveAcc=0;
+obstacles=[]; stars=[];
+spawnT=0; starSpawnT=0; surviveAcc=0;
+
+adBoard.x = canvas.width + 200;
+adBoard.active = false;
+adBoard.nextScore = 20;
   holdFillEl.style.width="0%";
   updateRewardUI();
 
@@ -607,6 +628,18 @@ function roundRect(x,y,w,h,r){
 function drawBackground(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
+  // skyline background
+  ctx.fillStyle="rgba(255,220,120,.15)";
+
+  for(let i=0;i<10;i++){
+    ctx.fillRect(
+      i*120,
+      groundY-80-Math.random()*120,
+      60,
+      120
+    );
+  }
+
   // road
   ctx.fillStyle="rgba(0,0,0,.88)";
   ctx.fillRect(0, groundY, canvas.width, 4);
@@ -667,27 +700,74 @@ function drawObstacle(o){
   ctx.fillStyle="rgba(0,0,0,.92)";
   roundRect(o.x,o.y,o.w,o.h,12); ctx.fill();
 }
-function drawStar(s){
+function drawAdBoard(){
+  if(!adBoard.active) return;
+
   ctx.save();
-  ctx.translate(s.x,s.y);
 
-  ctx.fillStyle="rgba(255,212,0,.30)";
-  ctx.beginPath(); ctx.arc(0,0,24,0,Math.PI*2); ctx.fill();
+  // เสาป้าย
+  ctx.fillStyle = "rgba(0,0,0,.75)";
+  ctx.fillRect(adBoard.x + 24, adBoard.y + adBoard.h, 8, groundY - (adBoard.y + adBoard.h));
+  ctx.fillRect(adBoard.x + adBoard.w - 32, adBoard.y + adBoard.h, 8, groundY - (adBoard.y + adBoard.h));
 
-  ctx.fillStyle="#FFD400";
-  ctx.beginPath();
-  const spikes=5, outerR=14, innerR=6.5;
-  let rot=Math.PI/2*3, step=Math.PI/spikes;
-  ctx.moveTo(0,-outerR);
-  for(let i=0;i<spikes;i++){
-    ctx.lineTo(Math.cos(rot)*outerR, Math.sin(rot)*outerR); rot+=step;
-    ctx.lineTo(Math.cos(rot)*innerR, Math.sin(rot)*innerR); rot+=step;
+  // กรอบป้าย
+  ctx.fillStyle = "#111";
+  roundRect(adBoard.x - 6, adBoard.y - 6, adBoard.w + 12, adBoard.h + 12, 14);
+  ctx.fill();
+
+  ctx.fillStyle = "#fff";
+  roundRect(adBoard.x, adBoard.y, adBoard.w, adBoard.h, 10);
+  ctx.fill();
+
+  if(adImg.complete && adImg.naturalWidth > 0){
+    ctx.save();
+    roundRect(adBoard.x, adBoard.y, adBoard.w, adBoard.h, 10);
+    ctx.clip();
+    ctx.drawImage(adImg, adBoard.x, adBoard.y, adBoard.w, adBoard.h);
+    ctx.restore();
+  }else{
+    ctx.fillStyle = "#FFD400";
+    ctx.font = "900 22px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("realme P4 Power", adBoard.x + adBoard.w / 2, adBoard.y + adBoard.h / 2);
   }
-  ctx.closePath(); ctx.fill();
 
   ctx.restore();
 }
-function tickSurvive(dt){
+
+function drawStar(s){
+  ctx.save();
+  ctx.translate(s.x, s.y);
+
+  ctx.fillStyle = "rgba(255,212,0,.30)";
+  ctx.beginPath();
+  ctx.arc(0, 0, 24, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#FFD400";
+  ctx.beginPath();
+
+  const spikes = 5;
+  const outerR = 14;
+  const innerR = 6.5;
+  let rot = Math.PI / 2 * 3;
+  const step = Math.PI / spikes;
+
+  ctx.moveTo(0, -outerR);
+
+  for(let i = 0; i < spikes; i++){
+    ctx.lineTo(Math.cos(rot) * outerR, Math.sin(rot) * outerR);
+    rot += step;
+    ctx.lineTo(Math.cos(rot) * innerR, Math.sin(rot) * innerR);
+    rot += step;
+  }
+
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
+ function tickSurvive(dt){
   surviveAcc += dt;
   if(surviveAcc >= 0.65){
     surviveAcc = 0;
@@ -702,6 +782,18 @@ function loop(t){
   lastTime=t;
 
   const speed = speedBase + Math.min(680, score*0.85);
+if(score >= adBoard.nextScore && !adBoard.active){
+  adBoard.active = true;
+  adBoard.x = canvas.width + 80;
+  adBoard.nextScore += 20;
+}
+
+if(adBoard.active){
+  adBoard.x -= speed * 0.45 * dt;
+  if(adBoard.x + adBoard.w < -40){
+    adBoard.active = false;
+  }
+}
 
   spawnT += dt;
   starSpawnT += dt;
@@ -743,10 +835,11 @@ function loop(t){
   tickSurvive(dt);
 
   // draw
-  drawBackground();
-  for(const s of stars) drawStar(s);
-  for(const o of obstacles) drawObstacle(o);
-  drawPlayer();
+drawBackground();
+drawAdBoard();
+for(const s of stars) drawStar(s);
+for(const o of obstacles) drawObstacle(o);
+drawPlayer();
 
   requestAnimationFrame(loop);
 }
@@ -890,8 +983,3 @@ setInterval(refreshLB, 15000);
 </script>
 </body>
 </html>
-
-
-
-
-
