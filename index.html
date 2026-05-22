@@ -630,16 +630,16 @@ function drawPlayer(){
   ctx.ellipse(px+w/2, groundY+14, w/2.2, 11, 0, 0, Math.PI*2);
   ctx.fill();
 
-  // body
-  ctx.fillStyle="#111";
-  roundRect(px,py,w,h,16); ctx.fill();
+// body
+ctx.fillStyle="#FFD400";
+roundRect(px,py,w,h,16); ctx.fill();
 
   // screen
   ctx.fillStyle="#0f2b3a";
   roundRect(px+7,py+7,w-14,Math.max(12,h-18),12); ctx.fill();
 
   // logo text
-  ctx.fillStyle="#FFD400";
+ ctx.fillStyle="#111";
   ctx.font="bold 13px Arial";
   ctx.textAlign="center";
   ctx.textBaseline="middle";
